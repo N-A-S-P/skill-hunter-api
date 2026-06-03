@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: skillhunter-postgres
+    environment:
+      POSTGRES_DB: skillhunter
+      POSTGRES_USER: skillhunter
+      POSTGRES_PASSWORD: skillhunter
+    ports:
+      - "5432:5432"
+    volumes:
+      - skillhunter_pg_data:/var/lib/postgresql/data
+
+volumes:
+  skillhunter_pg_data:
