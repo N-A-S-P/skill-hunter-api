@@ -33,7 +33,7 @@ public class AppUserService {
     }
 
     public AppUserDto getAppUserByUserName(String userName) {
-        var user = repository.findByUserName(userName)
+        var user = repository.findByUserNameIgnoreCase(userName)
                 .orElseThrow(() ->
                         new EntityNotFoundException(
                                 "Could not find AppUser with username \"%s\"".formatted(userName)));
@@ -41,15 +41,20 @@ public class AppUserService {
     }
 
     public AppUserDto createAppUser(AppUserRequest request) {
-        if (!repository.existsByUserName(request.userName())) {
-            var user = repository.save(mapper.toEntity(request));
-            return mapper.toDto(user);
-        } else {
+        if (repository.existsByUserNameIgnoreCase((request.userName()))) {
             throw new IllegalArgumentException("User with username \"%s\" already exists".formatted(request.userName()));
         }
+
+        var user = repository.save(mapper.toEntity(request));
+        return mapper.toDto(user);
     }
 
     public AppUserDto updateAppUser(Long id, AppUserRequest request) {
+        var existingUser = repository.findByUserNameIgnoreCase(request.userName());
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
+            throw new IllegalArgumentException("User with username \"%s\" already exists".formatted(request.userName()));
+        }
+
         var user = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find AppUser with id %d".formatted(id)));
         mapper.updateEntity(user, request);
@@ -58,11 +63,10 @@ public class AppUserService {
     }
 
     public void deleteAppUser(Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        }
-        else {
+        if (!repository.existsById(id)) {
             throw new EntityNotFoundException("Could not find AppUser with id %d".formatted(id));
         }
+
+        repository.deleteById(id);
     }
 }
