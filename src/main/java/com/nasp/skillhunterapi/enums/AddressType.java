@@ -1,11 +1,6 @@
 package com.nasp.skillhunterapi.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public enum AddressType {
+public enum AddressType implements LookupEnum {
     HQ("Headquarters"),
     WORK_LOCATION("Office"),
     MAILING("Mailing"),
@@ -13,4 +8,13 @@ public enum AddressType {
     INTERVIEW_SITE("Interview venue");
 
     private final String display;
+
+    AddressType(String display) {
+        this.display = display;
+    }
+
+    @Override
+    public String getDisplay() {
+        return display;
+    }
 }

@@ -1,14 +1,18 @@
 package com.nasp.skillhunterapi.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public enum PositionType {
+public enum PositionType implements LookupEnum {
     DIRECT_HIRE("Full Time"),
     CONTRACT("Contract"),
     CONTRACT_TO_HIRE("Contract-to-Hire");
 
     private final String display;
+
+    PositionType(String display) {
+        this.display = display;
+    }
+
+    @Override
+    public String getDisplay() {
+        return display;
+    }
 }

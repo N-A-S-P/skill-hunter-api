@@ -1,11 +1,6 @@
 package com.nasp.skillhunterapi.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public enum PositionApplicationStatus {
+public enum PositionApplicationStatus implements LookupEnum {
     APPLIED("Applied"),
     SCREENING("Screening"),
     INTERVIEW("Interview"),
@@ -14,5 +9,15 @@ public enum PositionApplicationStatus {
     GHOSTED("Ghosted"),
     ACCEPTED("Accepted"),
     WITHDREW("Withdrew");
+
     private final String display;
+
+    PositionApplicationStatus(String display) {
+        this.display = display;
+    }
+
+    @Override
+    public String getDisplay() {
+        return display;
+    }
 }

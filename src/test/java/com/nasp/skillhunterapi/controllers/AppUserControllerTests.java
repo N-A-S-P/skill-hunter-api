@@ -1,9 +1,9 @@
 package com.nasp.skillhunterapi.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nasp.skillhunterapi.dto.AppUserDto;
 import com.nasp.skillhunterapi.dto.AppUserRequest;
 import com.nasp.skillhunterapi.service.AppUserService;
+import static com.nasp.skillhunterapi.testutils.JsonSerializer.stringify;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,8 +27,6 @@ class AppUserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
     private AppUserService appUserService;
@@ -124,7 +122,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(post("/api/users")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(appUserRequest)))
+                            .content(stringify(appUserRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(1))
                     .andExpect(jsonPath("$.userName").value("testuser"))
@@ -138,7 +136,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(post("/api/users")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                            .content(stringify(request)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.message").value("userName: must not be blank"))
@@ -155,7 +153,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appUserRequest)))
+                        .content(stringify(appUserRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.message").value("User with username \"testuser\" already exists"))
@@ -176,7 +174,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(put("/api/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                            .content(stringify(request)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(1))
                     .andExpect(jsonPath("$.userName").value("updateduser"))
@@ -191,7 +189,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(put("/api/users/999")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(appUserRequest)))
+                            .content(stringify(appUserRequest)))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.status").value(404))
                     .andExpect(jsonPath("$.message").value("Could not find AppUser with id 999"))
@@ -205,7 +203,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(put("/api/users/999")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
+                            .content(stringify(request)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.message").value("userName: must not be blank"))
@@ -222,7 +220,7 @@ class AppUserControllerTests {
 
             mockMvc.perform(put("/api/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(appUserRequest)))
+                            .content(stringify(appUserRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.status").value(400))
                     .andExpect(jsonPath("$.message").value("User with username \"testuser\" already exists"))

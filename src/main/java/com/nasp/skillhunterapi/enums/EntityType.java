@@ -1,11 +1,6 @@
 package com.nasp.skillhunterapi.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public enum EntityType {
+public enum EntityType implements LookupEnum {
     COMPANY("Company"),
     CONTACT("Contact"),
     INTERACTION("Interaction"),
@@ -14,4 +9,13 @@ public enum EntityType {
     POSITION_APPLICATION("Application");
 
     private final String display;
+
+    EntityType(String display) {
+        this.display = display;
+    }
+
+    @Override
+    public String getDisplay() {
+        return display;
+    }
 }

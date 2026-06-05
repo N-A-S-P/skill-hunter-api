@@ -1,11 +1,6 @@
 package com.nasp.skillhunterapi.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public enum RelationshipType {
+public enum RelationshipType implements LookupEnum {
     COWORKER("Coworker"),
     RECRUITER("Recruiter"),
     INTERVIEWER("Interviewer"),
@@ -16,4 +11,13 @@ public enum RelationshipType {
     REFERENCE("Reference");
 
     private final String display;
+
+    RelationshipType(String display) {
+        this.display = display;
+    }
+
+    @Override
+    public String getDisplay() {
+        return display;
+    }
 }

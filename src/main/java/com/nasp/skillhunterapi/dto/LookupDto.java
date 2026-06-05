@@ -1,6 +1,6 @@
 package com.nasp.skillhunterapi.dto;
 
-public record LookupType(
+public record LookupDto(
     String value,
     String display
 ) {}
