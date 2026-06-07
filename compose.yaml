@@ -11,5 +11,37 @@ services:
     volumes:
       - skillhunter_pg_data:/var/lib/postgresql/data
 
+  postgres-keycloak:
+    image: postgres:16-alpine
+    restart: always
+    container_name: keycloak-postgres
+    environment:
+      POSTGRES_USER: keycloak_user
+      POSTGRES_PASSWORD: keycloak_pass
+      POSTGRES_DB: keycloak
+    volumes:
+      - postgres-keycloak-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # exposed for local debugging
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: skillhunter-keycloak
+    restart: always
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: keycloak_pass
+      KC_DB_URL_HOST: postgres-keycloak
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: changeme
+      KC_HOSTNAME: keycloak.localhost
+    depends_on:
+      - postgres-keycloak
+
 volumes:
   skillhunter_pg_data:
+  postgres-keycloak-data:

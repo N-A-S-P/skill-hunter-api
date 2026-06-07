@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "placements")
-public class Placement extends OwnedEntity {
+public class Placement extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
@@ -30,4 +31,11 @@ public class Placement extends OwnedEntity {
 
     private LocalDate startedOn;
     private LocalDate endedOn;
+
+    @ManyToMany
+    @JoinTable(
+            name = "placement_skills",
+            joinColumns = @JoinColumn(name = "placement_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    private List<Skill> skills;
 }

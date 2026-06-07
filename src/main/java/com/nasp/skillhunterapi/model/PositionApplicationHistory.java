@@ -2,10 +2,12 @@ package com.nasp.skillhunterapi.model;
 
 import com.nasp.skillhunterapi.enums.PositionApplicationStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "position_application_history")
-public class PositionApplicationHistory extends BaseEntity {
+public class PositionApplicationHistory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "position_application_id", nullable = false)
@@ -23,8 +28,10 @@ public class PositionApplicationHistory extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private PositionApplicationStatus status;
 
+    @CreationTimestamp
     private LocalDateTime changedAt;
 
     @Column(length = 1000)

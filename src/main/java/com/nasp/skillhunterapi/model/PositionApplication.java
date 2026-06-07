@@ -16,13 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "applications")
-public class PositionApplication extends OwnedEntity {
+public class PositionApplication extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
     private LocalDate appliedOn;
-    private Boolean isOpen; // accepting applications
+    private Boolean isActive; // accepting applications
 
     @Enumerated(EnumType.STRING)
     private PositionApplicationStatus status;

@@ -8,7 +8,8 @@ public enum PositionApplicationStatus implements LookupEnum {
     REJECTED("Rejected"),
     GHOSTED("Ghosted"),
     ACCEPTED("Accepted"),
-    WITHDREW("Withdrew");
+    WITHDREW("Withdrew"),
+    ARCHIVED("Archived");
 
     private final String display;
 

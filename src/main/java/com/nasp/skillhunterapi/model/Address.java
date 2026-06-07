@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,8 +26,9 @@ public class Address extends BaseEntity {
     private String state;
     private String zipCode;
 
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    private AddressType addressType;
+    private Set<AddressType> addressTypes;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
