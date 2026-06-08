@@ -1,7 +1,7 @@
 package com.nasp.skillhunterapi.controllers;
 
-import com.nasp.skillhunterapi.dto.AppUserDto;
-import com.nasp.skillhunterapi.dto.AppUserRequest;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
 import com.nasp.skillhunterapi.service.AppUserService;
 import static com.nasp.skillhunterapi.testutils.JsonSerializer.stringify;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,8 +38,8 @@ class AppUserControllerTests {
     void getAllAppUsers() throws Exception {
         when(appUserService.getAllAppUsers())
                 .thenReturn(List.of(
-                        new AppUserDto(1L, "testuser", "Test User"),
-                        new AppUserDto(2L, "anotheruser", "Another User")
+                        new AppUserResponse(1L, "testuser", "Test User"),
+                        new AppUserResponse(2L, "anotheruser", "Another User")
                 ));
 
         mockMvc.perform(get("/api/users"))
@@ -57,7 +57,7 @@ class AppUserControllerTests {
         @DisplayName("should return user")
         void happyPath() throws Exception {
             when(appUserService.getAppUserById(1L))
-                    .thenReturn(new AppUserDto(1L, "testuser", "Test User"));
+                    .thenReturn(new AppUserResponse(1L, "testuser", "Test User"));
 
             mockMvc.perform(get("/api/users/1"))
                     .andExpect(status().isOk())
@@ -88,7 +88,7 @@ class AppUserControllerTests {
         @DisplayName("should return user")
         void happyPath() throws Exception {
             when(appUserService.getAppUserByUserName("testuser"))
-                    .thenReturn(new AppUserDto(1L, "testuser", "Test User"));
+                    .thenReturn(new AppUserResponse(1L, "testuser", "Test User"));
 
             mockMvc.perform(get("/api/users/username/testuser"))
                     .andExpect(status().isOk())
@@ -118,12 +118,12 @@ class AppUserControllerTests {
         @DisplayName("should create user")
         void happyPath() throws Exception {
             when(appUserService.createAppUser(any(AppUserRequest.class)))
-                    .thenReturn(new AppUserDto(1L, "testuser", "Test User"));
+                    .thenReturn(new AppUserResponse(1L, "testuser", "Test User"));
 
             mockMvc.perform(post("/api/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(stringify(appUserRequest)))
-                    .andExpect(status().isOk())
+                    .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.id").value(1))
                     .andExpect(jsonPath("$.userName").value("testuser"))
                     .andExpect(jsonPath("$.display").value("Test User"));
@@ -170,7 +170,7 @@ class AppUserControllerTests {
             var request = new AppUserRequest("updateduser", "Updated User");
 
             when(appUserService.updateAppUser(eq(1L), any(AppUserRequest.class)))
-                    .thenReturn(new AppUserDto(1L, "updateduser", "Updated User"));
+                    .thenReturn(new AppUserResponse(1L, "updateduser", "Updated User"));
 
             mockMvc.perform(put("/api/users/1")
                             .contentType(MediaType.APPLICATION_JSON)

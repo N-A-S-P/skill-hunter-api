@@ -1,16 +1,16 @@
 package com.nasp.skillhunterapi.mapping;
 
-import com.nasp.skillhunterapi.dto.AppUserDto;
-import com.nasp.skillhunterapi.dto.AppUserRequest;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
 import com.nasp.skillhunterapi.model.AppUser;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppUserMapper implements Mapper<AppUser, AppUserDto, AppUserRequest, AppUserRequest> {
+public class AppUserMapper implements Mapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> {
 
     @Override
-    public AppUserDto toDto(AppUser user) {
-        return new AppUserDto(
+    public AppUserResponse toResponse(AppUser user) {
+        return new AppUserResponse(
                 user.getId(),
                 user.getUserName(),
                 user.getDisplay()

@@ -1,6 +1,6 @@
 package com.nasp.skillhunterapi.service;
 
-import com.nasp.skillhunterapi.dto.LookupDto;
+import com.nasp.skillhunterapi.dto.LookupResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,8 @@ public class LookupServiceTests {
         var result = sut.getLookup("workLocation");
 
         assertThat(result).hasSize(3);
-        assertThat(result).extracting(LookupDto::value).containsAll(List.of("ON_SITE", "HYBRID", "REMOTE"));
-        assertThat(result).extracting(LookupDto::display).containsAll(List.of("On-site", "Hybrid", "Remote"));
+        assertThat(result).extracting(LookupResponse::value).containsAll(List.of("ON_SITE", "HYBRID", "REMOTE"));
+        assertThat(result).extracting(LookupResponse::display).containsAll(List.of("On-site", "Hybrid", "Remote"));
     }
 
     @Test

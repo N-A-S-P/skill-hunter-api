@@ -1,6 +1,6 @@
 package com.nasp.skillhunterapi.controllers;
 
-import com.nasp.skillhunterapi.dto.LookupDto;
+import com.nasp.skillhunterapi.dto.LookupResponse;
 import com.nasp.skillhunterapi.service.LookupService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,8 +30,8 @@ public class LookupControllerTests {
     void happyPath() throws Exception {
         when(lookupService.getLookup("testLookup"))
                 .thenReturn(List.of(
-                        new LookupDto("TYPE_1", "Type 1"),
-                        new LookupDto("TYPE_2", "Type 2")
+                        new LookupResponse("TYPE_1", "Type 1"),
+                        new LookupResponse("TYPE_2", "Type 2")
                 ));
 
         mockMvc.perform(get("/api/lookup/testLookup"))

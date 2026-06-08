@@ -1,6 +1,6 @@
 package com.nasp.skillhunterapi.service;
 
-import com.nasp.skillhunterapi.dto.LookupDto;
+import com.nasp.skillhunterapi.dto.LookupResponse;
 import com.nasp.skillhunterapi.enums.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class LookupService {
 
     public LookupService() {}
 
-    public List<LookupDto> getLookup(String lookupType) {
+    public List<LookupResponse> getLookup(String lookupType) {
         if (lookupType == null || lookupType.isBlank()) {
             throw new IllegalArgumentException("lookup type must not be null, empty or all whitespace");
         }
@@ -38,7 +38,7 @@ public class LookupService {
         return Arrays.stream(enumType.getEnumConstants())
                 .map(value -> {
                     var lookupEnum = (LookupEnum)value;
-                    return new LookupDto(value.name(), lookupEnum.getDisplay());
+                    return new LookupResponse(value.name(), lookupEnum.getDisplay());
                 }).toList();
     }
 

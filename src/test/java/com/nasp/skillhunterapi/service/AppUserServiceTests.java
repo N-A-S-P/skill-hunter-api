@@ -1,7 +1,7 @@
 package com.nasp.skillhunterapi.service;
 
-import com.nasp.skillhunterapi.dto.AppUserDto;
-import com.nasp.skillhunterapi.dto.AppUserRequest;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
 import com.nasp.skillhunterapi.mapping.AppUserMapper;
 import com.nasp.skillhunterapi.model.AppUser;
 import com.nasp.skillhunterapi.repository.AppUserRepository;
@@ -62,15 +62,15 @@ public class AppUserServiceTests {
             assertThat(result).hasSize(2);
 
             assertThat(result)
-                    .extracting(AppUserDto::id)
+                    .extracting(AppUserResponse::id)
                     .containsExactly(1L, 2L);
 
             assertThat(result)
-                    .extracting(AppUserDto::userName)
+                    .extracting(AppUserResponse::userName)
                     .containsExactly("testuser", "test_user");
 
             assertThat(result)
-                    .extracting(AppUserDto::display)
+                    .extracting(AppUserResponse::display)
                     .containsExactly("Amanda", "Bianca");
         }
     }

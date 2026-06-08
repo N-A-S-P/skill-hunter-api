@@ -1,7 +1,7 @@
 package com.nasp.skillhunterapi.controllers;
 
 import com.nasp.skillhunterapi.dto.ApiError;
-import com.nasp.skillhunterapi.dto.LookupDto;
+import com.nasp.skillhunterapi.dto.LookupResponse;
 import com.nasp.skillhunterapi.service.LookupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,14 +27,14 @@ class LookupController {
     private final LookupService service;
 
     @Operation(summary = "Get lookup values", description = """
-            Returns the availale values for a given lookup type.""")
+            Returns the available values for a given lookup type.""")
     @ApiResponses(value = {
             @ApiResponse(
                     description = "Lookup values returned successfully",
                     responseCode = "200",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = LookupDto.class))
+                            array = @ArraySchema(schema = @Schema(implementation = LookupResponse.class))
                     )
             ),
             @ApiResponse(
@@ -55,7 +55,7 @@ class LookupController {
             )
     })
     @GetMapping("/{lookupType}")
-    public List<LookupDto> getLookup(
+    public List<LookupResponse> getLookup(
             @PathVariable
             String lookupType
     ) {

@@ -1,7 +1,7 @@
 package com.nasp.skillhunterapi.mapping;
 
-import com.nasp.skillhunterapi.dto.AppUserDto;
-import com.nasp.skillhunterapi.dto.AppUserRequest;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
+import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
 import com.nasp.skillhunterapi.model.AppUser;
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AppUserMapperTests {
     @Test
-    void toDto_ShouldMapAppUserToAppUserDto() {
+    void toResponse_ShouldMapAppUserToAppUserResponse() {
         var sut = new AppUserMapper();
         var entity = createAppUser(1L, "testuser", "Test User");
 
-        AppUserDto result = sut.toDto(entity);
+        AppUserResponse result = sut.toResponse(entity);
 
         assertThat(result.id()).isEqualTo(1L);
         assertThat(result.userName()).isEqualTo("testuser");
