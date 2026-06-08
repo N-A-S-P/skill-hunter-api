@@ -40,7 +40,6 @@ Implemented:
 In Progress:
 
 * Company management
-* Authentication and authorization
 * Expanded test coverage
 
 ## Running the Application
