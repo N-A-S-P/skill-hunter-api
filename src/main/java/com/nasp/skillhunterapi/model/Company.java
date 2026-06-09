@@ -15,15 +15,18 @@ import java.util.*;
 @Table(name = "companies")
 public class Company extends OwnedEntity {
     public Company() {
-        this.companyTypes = Set.of();
-        this.addresses = new ArrayList<>();
+        this.initializeCollections();
     }
+
     public Company(String name, String website, String industry, Set<CompanyType> companyTypes, List<Address> addresses) {
         this.name = name;
         this.website = website;
         this.industry = industry;
-        this.companyTypes = companyTypes == null ? Set.of() : companyTypes;
-        this.addresses = new ArrayList<>();
+        this.initializeCollections();
+
+        if (companyTypes != null) {
+            this.companyTypes = companyTypes;
+        }
 
         if (addresses != null) {
             addresses.forEach(this::addAddress);
@@ -69,5 +72,14 @@ public class Company extends OwnedEntity {
             addresses.remove(address);
             address.setCompany(null);
         }
+    }
+
+    private void initializeCollections() {
+        this.companyTypes = new HashSet<>();
+
+        this.addresses = new ArrayList<>();
+        this.contactRelationships = new ArrayList<>();
+        this.positions = new ArrayList<>();
+        this.placements = new ArrayList<>();
     }
 }
