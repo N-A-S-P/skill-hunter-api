@@ -2,6 +2,7 @@ package com.nasp.skillhunterapi.service;
 
 import com.nasp.skillhunterapi.dto.LookupResponse;
 import com.nasp.skillhunterapi.enums.*;
+import com.nasp.skillhunterapi.mapping.LookupMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 
 @Service
 public class LookupService {
-    private final Map<String, Class<? extends Enum<?>>> lookupTypes =
+    private final Map<String, Class<? extends LookupEnum>> lookupTypes =
             Map.of(
                     "addressType", AddressType.class,
                     "applicationStatus", PositionApplicationStatus.class,
@@ -22,7 +23,11 @@ public class LookupService {
                     "workLocation", WorkLocation.class
             );
 
-    public LookupService() {}
+    private final LookupMapper lookupMapper;
+
+    public LookupService(LookupMapper lookupMapper) {
+        this.lookupMapper = lookupMapper;
+    }
 
     public List<LookupResponse> getLookup(String lookupType) {
         if (lookupType == null || lookupType.isBlank()) {
@@ -36,10 +41,7 @@ public class LookupService {
         }
 
         return Arrays.stream(enumType.getEnumConstants())
-                .map(value -> {
-                    var lookupEnum = (LookupEnum)value;
-                    return new LookupResponse(value.name(), lookupEnum.getDisplay());
-                }).toList();
+                .map(lookupMapper::toResponse).toList();
     }
 
 }
