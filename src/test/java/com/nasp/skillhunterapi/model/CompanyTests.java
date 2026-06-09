@@ -27,7 +27,7 @@ public class CompanyTests {
     class ConstructorWithAddressRelationshipInitialization {
         @Test
         @DisplayName("should set the parent of each address passed in")
-        void constructor_addressesIncluded_addressRelationshipNotNull() {
+        void constructor_addressesIncluded() {
             var address = new Address();
             var company = new Company(
                     "Vizzini's Army",
@@ -44,7 +44,7 @@ public class CompanyTests {
 
         @Test
         @DisplayName("should initialize address relationships if not passed any")
-        void constructor_addressesIncluded_addressesNull() {
+        void constructor_addressesNull() {
             var company = new Company(
                     "Vizzini's Army",
                     "https://www.inconceivable.com",
@@ -54,6 +54,22 @@ public class CompanyTests {
 
             assertThat(company.getAddresses()).isNotNull();
             assertThat(company.getAddresses()).hasSize(0);
+        }
+
+        @Test
+        @DisplayName("should initialize companyTypes to empty set")
+        void constructor_companyTypesNull() {
+            var company = new Company(
+                    "Dread Pirates Succession Advisors",
+                    "https://www.dp-successors.com",
+                    "Legal",
+                    null,
+                    List.of()
+            );
+
+            assertThat(company.getCompanyTypes()).isNotNull();
+
+            assertThat(company.getCompanyTypes()).isNotNull();
         }
     }
 
