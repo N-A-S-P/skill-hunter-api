@@ -135,7 +135,7 @@ public class CompanyTests {
             company.removeAddressById(2L);
 
             assertThat(company.getAddresses()).contains(address);
-            assertThat(address.getCompany()).isNull();
+            assertThat(address.getCompany()).isNotNull();
         }
     }
 }
