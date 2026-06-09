@@ -53,7 +53,7 @@ public class CompanyTests {
                     null);
 
             assertThat(company.getAddresses()).isNotNull();
-            assertThat(company.getAddresses()).hasSize(0);
+            assertThat(company.getAddresses()).isEmpty();
         }
 
         @Test
@@ -69,7 +69,7 @@ public class CompanyTests {
 
             assertThat(company.getCompanyTypes()).isNotNull();
 
-            assertThat(company.getCompanyTypes()).isNotNull();
+            assertThat(company.getCompanyTypes()).isEmpty();
         }
     }
 
@@ -150,8 +150,8 @@ public class CompanyTests {
 
             company.removeAddressById(2L);
 
-            assertThat(company.getAddresses()).contains(address);
-            assertThat(address.getCompany()).isNotNull();
+            assertThat(company.getAddresses()).containsExactly(address);
+            assertThat(address.getCompany()).isEqualTo(company);
         }
     }
 }
