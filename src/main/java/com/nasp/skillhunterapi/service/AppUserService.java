@@ -2,7 +2,7 @@ package com.nasp.skillhunterapi.service;
 
 import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
 import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
-import com.nasp.skillhunterapi.mapping.Mapper;
+import com.nasp.skillhunterapi.mapping.BaseEntityMapper;
 import com.nasp.skillhunterapi.model.AppUser;
 import com.nasp.skillhunterapi.repository.AppUserRepository;
 import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdNotFoundMessage;
@@ -17,12 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppUserService {
     private final AppUserRepository repository;
-    private final Mapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> mapper;
+    private final BaseEntityMapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> baseEntityMapper;
 
     public List<AppUserResponse> getAllAppUsers() {
         return repository.findAll()
                 .stream()
-                .map(mapper::toResponse)
+                .map(baseEntityMapper::toResponse)
                 .toList();
     }
 
@@ -31,7 +31,7 @@ public class AppUserService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         getEntityIdNotFoundMessage(AppUser.class, id)
                 ));
-        return mapper.toResponse(user);
+        return baseEntityMapper.toResponse(user);
     }
 
     public AppUserResponse getAppUserByUserName(String userName) {
@@ -39,7 +39,7 @@ public class AppUserService {
                 .orElseThrow(() ->
                         new EntityNotFoundException(
                                 "Could not find AppUser with username \"%s\"".formatted(userName)));
-        return mapper.toResponse(user);
+        return baseEntityMapper.toResponse(user);
     }
 
     public AppUserResponse createAppUser(AppUserRequest request) {
@@ -47,8 +47,8 @@ public class AppUserService {
             throw new IllegalArgumentException(getDuplicateUserNameMessage(request.userName()));
         }
 
-        var user = repository.save(mapper.toEntity(request));
-        return mapper.toResponse(user);
+        var user = repository.save(baseEntityMapper.toEntity(request));
+        return baseEntityMapper.toResponse(user);
     }
 
     public AppUserResponse updateAppUser(Long id, AppUserRequest request) {
@@ -60,9 +60,9 @@ public class AppUserService {
         var user = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         getEntityIdNotFoundMessage(AppUser.class, id)));
-        mapper.updateEntity(user, request);
+        baseEntityMapper.updateEntity(user, request);
         repository.save(user);
-        return mapper.toResponse(user);
+        return baseEntityMapper.toResponse(user);
     }
 
     public void deleteAppUser(Long id) {

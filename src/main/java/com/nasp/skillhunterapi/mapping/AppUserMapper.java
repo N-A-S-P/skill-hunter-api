@@ -6,7 +6,7 @@ import com.nasp.skillhunterapi.model.AppUser;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AppUserMapper implements Mapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> {
+public class AppUserMapper implements BaseEntityMapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> {
 
     @Override
     public AppUserResponse toResponse(AppUser user) {
