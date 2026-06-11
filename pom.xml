@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.nasp</groupId>
     <artifactId>SkillHunterAPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.0</version>
     <name>SkillHunterAPI</name>
     <description>SkillHunterAPI</description>
     <url/>
@@ -45,6 +45,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

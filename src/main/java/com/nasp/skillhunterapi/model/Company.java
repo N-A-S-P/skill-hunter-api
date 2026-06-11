@@ -18,15 +18,19 @@ public class Company extends OwnedEntity {
         this.initializeCollections();
     }
 
-    public Company(String name, String website, String industry, Set<CompanyType> companyTypes, List<Address> addresses) {
+    public Company(String name, String website, String industry, Set<CompanyType> companyTypes) {
         this.name = name;
         this.website = website;
         this.industry = industry;
         this.initializeCollections();
 
         if (companyTypes != null) {
-            this.companyTypes = companyTypes;
+            this.companyTypes.addAll(companyTypes);
         }
+    }
+
+    public Company(String name, String website, String industry, Set<CompanyType> companyTypes, List<Address> addresses) {
+        this(name, website, industry, companyTypes);
 
         if (addresses != null) {
             addresses.forEach(this::addAddress);
@@ -45,7 +49,7 @@ public class Company extends OwnedEntity {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyContactRelationship> contactRelationships;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -72,6 +76,15 @@ public class Company extends OwnedEntity {
             addresses.remove(address);
             address.setCompany(null);
         }
+    }
+
+    public void removeRelationships() {
+        var addressIds = addresses.stream().map(Address::getId).toList();
+        addressIds.forEach(this::removeAddressById);
+
+        contactRelationships.clear();
+        positions.clear();
+        placements.clear();
     }
 
     private void initializeCollections() {

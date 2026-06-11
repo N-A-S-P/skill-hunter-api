@@ -1,7 +1,7 @@
 # Skill Hunter API
 
 ![Build](https://github.com/N-A-S-P/skill-hunter-api/actions/workflows/maven-tests.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-42%25-orange)
+![Coverage](https://img.shields.io/badge/coverage-47%25-orange)
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0-green)
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue)

@@ -1,12 +1,17 @@
 package com.nasp.skillhunterapi.model;
 
+import com.nasp.skillhunterapi.enums.AddressType;
+import com.nasp.skillhunterapi.enums.CompanyType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+import static com.nasp.skillhunterapi.testutils.TestDataCreator.createCompany;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,37 +28,20 @@ public class CompanyTests {
     }
 
     @Nested
-    @DisplayName("Initialization with passed addresses")
-    class ConstructorWithAddressRelationshipInitialization {
+    @DisplayName("Initialization with passed company types")
+    class ConstructorWithBasicFields {
         @Test
-        @DisplayName("should set the parent of each address passed in")
-        void constructor_addressesIncluded() {
-            var address = new Address();
+        @DisplayName("should set companyTypes")
+        void constructor_companyTypesNotNull() {
             var company = new Company(
-                    "Vizzini's Army",
-                    "https://www.inconceivable.com",
-                    "Mercenaries",
-                    Set.of(),
-                    List.of(address));
+                    "Dread Pirates Succession Advisors",
+                    "https://www.dp-successors.com",
+                    "Legal",
+                    Set.of(CompanyType.HIRER)
+            );
 
-            assertThat(company.getAddresses()).isNotNull();
-            assertThat(company.getAddresses()).hasSize(1);
-
-            assertThat(address.getCompany()).isEqualTo(company);
-        }
-
-        @Test
-        @DisplayName("should initialize address relationships if not passed any")
-        void constructor_addressesNull() {
-            var company = new Company(
-                    "Vizzini's Army",
-                    "https://www.inconceivable.com",
-                    "Mercenaries",
-                    Set.of(),
-                    null);
-
-            assertThat(company.getAddresses()).isNotNull();
-            assertThat(company.getAddresses()).isEmpty();
+            assertThat(company.getCompanyTypes()).hasSize(1);
+            assertThat(company.getCompanyTypes()).containsExactly(CompanyType.HIRER);
         }
 
         @Test
@@ -63,13 +51,27 @@ public class CompanyTests {
                     "Dread Pirates Succession Advisors",
                     "https://www.dp-successors.com",
                     "Legal",
-                    null,
-                    List.of()
+                    null
             );
 
             assertThat(company.getCompanyTypes()).isNotNull();
-
             assertThat(company.getCompanyTypes()).isEmpty();
+        }
+    }
+
+    @Nested
+    @DisplayName("Initialization with passed addresses")
+    class ConstructorWithAddresses {
+        @Test
+        @DisplayName("should set company on passed addresses")
+        void happyPath() {
+            var company = new Company("Jurassic Park San Diego", "", "Entertainment", Set.of(),
+                    List.of(
+                            new Address("123 Rexy Blvd", "", "San Diego", "CA", "99999", Set.of())
+                    ));
+
+            assertThat(company.getAddresses()).hasSize(1);
+            assertThat(company.getAddresses()).extracting(Address::getCompany).allMatch(comp -> comp.equals(company));
         }
     }
 
@@ -108,7 +110,13 @@ public class CompanyTests {
             var address = new Address();
             address.setId(1L);
 
-            var company = new Company("name", "", "", Set.of(), List.of(address));
+            var company = createCompany(
+                    1L,
+                    "Magic Max's Marvelous Market",
+                    "",
+                    "Retail",
+                    Set.of(),
+                    List.of(address));
 
             var result = company.getAddressById(1L);
 
@@ -134,7 +142,16 @@ public class CompanyTests {
         void happyPath() {
             var address = new Address();
             address.setId(1L);
-            var company = new Company("Magic Max's Marvelous Market", "", "Retail", Set.of(), List.of(address));
+            var addresses = new ArrayList<Address>();
+            addresses.add(address);
+
+            var company = createCompany(
+                    1L,
+                    "Magic Max's Marvelous Market",
+                    "",
+                    "Retail",
+                    Set.of(),
+                    addresses);
 
             company.removeAddressById(1L);
 
@@ -146,12 +163,40 @@ public class CompanyTests {
         void noMatch() {
             var address = new Address();
             address.setId(1L);
-            var company = new Company("Magic Max's Marvelous Market", "", "Retail", Set.of(), List.of(address));
+            var addresses = new ArrayList<Address>();
+            addresses.add(address);
+
+            var company = createCompany(
+                    1L,
+                    "Magic Max's Marvelous Market",
+                    "",
+                    "Retail",
+                    Set.of(),
+                    addresses);
 
             company.removeAddressById(2L);
 
             assertThat(company.getAddresses()).containsExactly(address);
             assertThat(address.getCompany()).isEqualTo(company);
+        }
+    }
+
+    @Nested
+    @DisplayName("removeRelationships")
+    class RemoveRelationships {
+        @Test
+        @DisplayName("should remove existing relationships")
+        void happyPath() {
+            var addresses = new ArrayList<Address>();
+            addresses.add(new Address("123 Milton Ave", "Ste 100", "Woodmine", "AZ", "99999", Set.of(AddressType.HQ)));
+            addresses.get(0).setId(1L);
+
+            var company = createCompany(1L,"Bradley Enterprises, LLC", "", "Manufacturing", Set.of(), addresses);
+
+            company.removeRelationships();
+
+            assertThat(company.getAddresses()).isEmpty();
+            assertThat(addresses).extracting(Address::getCompany).allMatch(Objects::isNull);
         }
     }
 }

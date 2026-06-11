@@ -29,6 +29,7 @@ public class CompanyContactRelationship extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RelationshipType relationshipType;
     private Boolean isCurrentRelationship;
+    private Boolean isPrimaryCompanyContact;
 
     private LocalDateTime startedOn;
     private LocalDateTime endedOn;
