@@ -20,18 +20,4 @@ public final class TestDataCreator {
         user.setId(id);
         return user;
     }
-
-    public static Company createCompany(
-            Long id,
-            String name,
-            String website,
-            String industry,
-            Set<CompanyType> companyTypes,
-            List<Address> addresses
-    ) {
-        var company = new Company(name, website, industry, companyTypes, addresses);
-        company.setId(id);
-
-        return company;
-    }
 }

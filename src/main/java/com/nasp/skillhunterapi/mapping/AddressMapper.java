@@ -7,6 +7,8 @@ import com.nasp.skillhunterapi.model.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+
 @Component
 @RequiredArgsConstructor
 public class AddressMapper implements BaseEntityMapper<Address, AddressResponse, AddressCreateRequest, AddressUpdateRequest> {
@@ -44,5 +46,6 @@ public class AddressMapper implements BaseEntityMapper<Address, AddressResponse,
         entity.setCity(request.city());
         entity.setState(request.state());
         entity.setZipCode(request.postalCode());
+        entity.setAddressTypes(new HashSet<>(request.addressTypes()));
     }
 }
