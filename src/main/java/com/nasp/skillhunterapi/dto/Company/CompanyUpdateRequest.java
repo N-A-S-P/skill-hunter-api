@@ -3,20 +3,16 @@ package com.nasp.skillhunterapi.dto.Company;
 import com.nasp.skillhunterapi.enums.CompanyType;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
 import java.util.Set;
 
-public record CompanyRequest(
+public record CompanyUpdateRequest(
         @NotBlank String name,
         String website,
         String industry,
-        Set<CompanyType> companyTypes,
-        CompanyAddressRequest addressRequests
+        Set<CompanyType> companyTypes
 ) {
-    public CompanyRequest {
+    public CompanyUpdateRequest {
         companyTypes = companyTypes == null ?
                 Set.of() : companyTypes;
-        addressRequests = addressRequests == null ?
-                new CompanyAddressRequest(List.of(), List.of(), List.of()) : addressRequests;
     }
 }

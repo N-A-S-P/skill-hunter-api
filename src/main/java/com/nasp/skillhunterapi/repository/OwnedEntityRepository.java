@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-interface OwnedEntityRepository<T extends OwnedEntity, ID> extends JpaRepository<T, ID> {
-    Optional<T> findByIdAndOwnerId(ID id, Long ownerId);
+interface OwnedEntityRepository<T extends OwnedEntity> extends JpaRepository<T, Long> {
+    Optional<T> findByIdAndOwnerId(Long id, Long ownerId);
     List<T> findAllByOwnerId(Long ownerId);
 }

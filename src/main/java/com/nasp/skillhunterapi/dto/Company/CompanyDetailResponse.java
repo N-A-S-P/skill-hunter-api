@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 @Schema(description = "Company")
-public record CompanyResponse(
+public record CompanyDetailResponse(
         Long id,
         @Schema(example = "Vizzini's Army")
         String name,
