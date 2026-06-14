@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
+import static com.nasp.skillhunterapi.testutils.AddressBuilder.anAddress;
 import static com.nasp.skillhunterapi.testutils.CompanyBuilder.aCompany;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -63,7 +64,7 @@ public class CompanyTests {
         @DisplayName("should set company on passed addresses")
         void happyPath() {
             var company = aCompany()
-                    .withAddresses(new Address("123 Rexy Blvd", "", "San Diego", "CA", "99999", Set.of()))
+                    .withAddresses(anAddress().build())
                     .build();
 
             assertThat(company.getAddresses()).hasSize(1);

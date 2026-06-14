@@ -12,4 +12,10 @@ public record CompanyAddressRequest(
         updateAddresses = updateAddresses == null ? List.of() : updateAddresses;
         removeAddressIds = removeAddressIds == null ? List.of() : removeAddressIds;
     }
+
+    public Boolean hasConflictingAddressIds() {
+        return updateAddresses.stream()
+                .map(AddressUpdateRequest::id)
+                .anyMatch(removeAddressIds::contains);
+    }
 }

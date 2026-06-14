@@ -15,4 +15,8 @@ public class ExceptionMessages {
         return "Could not find %s with id %d for user with id %d"
                 .formatted(entityClass.getSimpleName(), id, ownerId);
     }
+
+    public static @NonNull String getNoCurrentUserMessage() {
+        return "No logged in user";
+    }
 }

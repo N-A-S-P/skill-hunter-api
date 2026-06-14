@@ -55,6 +55,9 @@ public class CompanyService {
     public CompanyDetailResponse updateCompany(Long id, CompanyAddressRequest request) {
         var entity = getCompanyByIdAndUserId(id);
 
+        if (request.hasConflictingAddressIds())
+            throw new IllegalArgumentException("Address cannot be removed and updated in the same request");
+
         for (var removeId : request.removeAddressIds()) {
             entity.removeAddressById(removeId);
         }

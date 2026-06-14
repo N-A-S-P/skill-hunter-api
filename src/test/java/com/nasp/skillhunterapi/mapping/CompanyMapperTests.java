@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
+import static com.nasp.skillhunterapi.testutils.AddressBuilder.anAddress;
 import static com.nasp.skillhunterapi.testutils.CompanyBuilder.aCompany;
 import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +27,6 @@ public class CompanyMapperTests {
         var sut = new CompanyMapper(addressMapper, lookupMapper);
         var company = aCompany()
                 .withCompanyTypes(CompanyType.STAFFING_FIRM)
-                .withAddresses(new Address("867 Belmont View", "#4", "Absinthe", "NY", "75309", Set.of()))
                 .build();
 
         var result = sut.toListItemResponse(company);
@@ -48,7 +48,7 @@ public class CompanyMapperTests {
         var sut = new CompanyMapper(addressMapper, lookupMapper);
         var company = aCompany()
                 .withCompanyTypes(CompanyType.STAFFING_FIRM)
-                .withAddresses(new Address("867 Belmont View", "#4", "Absinthe", "NY", "75309", Set.of()))
+                .withAddresses(anAddress().build())
                 .build();
 
         var result = sut.toDetailResponse(company);
@@ -59,6 +59,9 @@ public class CompanyMapperTests {
         assertThat(result.companyTypes()).singleElement().satisfies(type -> {
             assertThat(type.value()).isEqualTo("STAFFING_FIRM");
             assertThat(type.display()).isEqualTo("Staffing Firm");
+        });
+        assertThat(result.addresses()).singleElement().satisfies(address -> {
+
         });
     }
 
