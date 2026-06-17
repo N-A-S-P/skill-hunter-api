@@ -22,7 +22,7 @@ The project began as an Access database, briefly evolved into a Django applicati
 
 ## Technology Stack
 
-* Java 17
+* Java 21
 * Spring Boot
 * Spring Data JPA
 * PostgreSQL

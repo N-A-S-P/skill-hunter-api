@@ -18,6 +18,29 @@ public class ProfileService {
     private final AppUserRepository repository;
     private final BaseEntityMapper<Profile, ProfileResponse, AppUserRequest, AppUserRequest> mapper;
 
+    private final String NO_ASSOCIATED_PROFILE = "Could not find Profile associated with log in";
+
+    public Long getCurrentUserId() {
+        var subject = getSubject();
+        return repository.findIdByExternalSubject(subject)
+                .orElseThrow(() -> new EntityNotFoundException(NO_ASSOCIATED_PROFILE));
+    }
+
+    public Profile getCurrentUser() {
+        var subject = getSubject();
+        // TODO: Create AppUser from jwt if not exists for subject
+        return repository.findByExternalSubject(subject)
+                .orElseThrow(() -> new EntityNotFoundException(NO_ASSOCIATED_PROFILE));
+    }
+
+    public ProfileResponse getProfile() {
+        var subject = getSubject();
+        var profile = repository.findByExternalSubject(subject)
+                .orElseThrow(() -> new EntityNotFoundException(NO_ASSOCIATED_PROFILE));
+
+        return mapper.toResponse(profile);
+    }
+
     private String getSubject() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -26,26 +49,5 @@ public class ProfileService {
         }
 
         return jwt.getSubject();
-    }
-
-    public Long getCurrentUserId() {
-        var subject = getSubject();
-        return repository.findIdByExternalSubject(subject)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find AppUser associated with log in"));
-    }
-
-    public Profile getCurrentUser() {
-        var subject = getSubject();
-        // TODO: Create AppUser from jwt if not exists for subject
-        return repository.findByExternalSubject(subject)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find AppUser associated with log in"));
-    }
-
-    public ProfileResponse getProfile() {
-        var subject = getSubject();
-        var profile = repository.findByExternalSubject(subject)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find profile associated with this log in"));
-
-        return mapper.toResponse(profile);
     }
 }
