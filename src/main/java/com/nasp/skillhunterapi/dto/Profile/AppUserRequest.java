@@ -1,4 +1,4 @@
-package com.nasp.skillhunterapi.dto.AppUser;
+package com.nasp.skillhunterapi.dto.Profile;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

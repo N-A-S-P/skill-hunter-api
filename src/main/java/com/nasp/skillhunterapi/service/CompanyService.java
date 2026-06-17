@@ -18,12 +18,12 @@ import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdForOwner
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
-    private final CurrentUserService currentUserService;
+    private final ProfileService profileService;
     private final OwnedEntityMapper<Company, CompanyDetailResponse, CompanyListItemResponse, CompanyCreateRequest, CompanyUpdateRequest> mapper;
     private final BaseEntityMapper<Address, AddressResponse, AddressCreateRequest, AddressUpdateRequest> addressMapper;
 
     private Long currentUserId() {
-        return currentUserService.getCurrentUserId();
+        return profileService.getCurrentUserId();
     }
 
     public CompanyDetailResponse getCompany(Long id) {
@@ -39,7 +39,7 @@ public class CompanyService {
     }
 
     public CompanyDetailResponse createCompany(CompanyCreateRequest request) {
-        var entity = mapper.toEntity(request, currentUserService.getCurrentUser());
+        var entity = mapper.toEntity(request, profileService.getCurrentUser());
         companyRepository.save(entity);
         return mapper.toDetailResponse(entity);
     }

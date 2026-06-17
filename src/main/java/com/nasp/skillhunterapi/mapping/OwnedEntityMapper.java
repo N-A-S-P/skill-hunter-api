@@ -1,6 +1,6 @@
 package com.nasp.skillhunterapi.mapping;
 
-import com.nasp.skillhunterapi.model.AppUser;
+import com.nasp.skillhunterapi.model.Profile;
 import com.nasp.skillhunterapi.model.OwnedEntity;
 
 public interface OwnedEntityMapper<
@@ -13,7 +13,7 @@ public interface OwnedEntityMapper<
 
     LIST_ITEM_RESPONSE toListItemResponse(ENTITY entity);
 
-    ENTITY toEntity(CREATE_REQUEST request, AppUser owner);
+    ENTITY toEntity(CREATE_REQUEST request, Profile owner);
 
     void updateEntity(ENTITY entity, UPDATE_REQUEST request);
 }

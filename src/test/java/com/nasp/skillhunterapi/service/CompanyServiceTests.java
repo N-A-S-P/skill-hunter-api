@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.nasp.skillhunterapi.testutils.CompanyBuilder.aCompany;
+import static com.nasp.skillhunterapi.testutils.builder.CompanyBuilder.aCompany;
 import static com.nasp.skillhunterapi.testutils.LookupResponseAssertions.matchesLookup;
 import static com.nasp.skillhunterapi.testutils.TestDataCreator.aUser;
-import static com.nasp.skillhunterapi.testutils.AddressBuilder.anAddress;
+import static com.nasp.skillhunterapi.testutils.builder.AddressBuilder.anAddress;
 import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdForOwnerNotFoundMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -38,7 +38,7 @@ public class CompanyServiceTests {
     @Mock
     private CompanyRepository repository;
     @Mock
-    private CurrentUserService currentUserService;
+    private ProfileService profileService;
 
     private final LookupMapper lookupMapper = new LookupMapper();
 
@@ -51,7 +51,7 @@ public class CompanyServiceTests {
 
     @BeforeEach
     void initialize() {
-        sut = new CompanyService(repository, currentUserService, companyMapper, addressMapper);
+        sut = new CompanyService(repository, profileService, companyMapper, addressMapper);
     }
 
     @Nested
@@ -59,7 +59,7 @@ public class CompanyServiceTests {
     class GetCompany {
         @BeforeEach
         void initialize() {
-            when(currentUserService.getCurrentUserId()).thenReturn(1L);
+            when(profileService.getCurrentUserId()).thenReturn(1L);
         }
 
         @Test
@@ -86,7 +86,7 @@ public class CompanyServiceTests {
         @Test
         @DisplayName("should throw EntityNotFound when company is not found")
         void companyNotFoundForIdAndUser() {
-            when(currentUserService.getCurrentUserId()).thenReturn(1L);
+            when(profileService.getCurrentUserId()).thenReturn(1L);
             when(repository.findByIdAndOwnerId(1L, 1L)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> sut.getCompany((1L)))
@@ -101,7 +101,7 @@ public class CompanyServiceTests {
         @Test
         @DisplayName("should return list of mapped CompanyListItemResponses")
         void happyPath() {
-            when(currentUserService.getCurrentUserId()).thenReturn(1L);
+            when(profileService.getCurrentUserId()).thenReturn(1L);
             when(repository.findAllByOwnerId(1L)).thenReturn(List.of(
                     aCompany().build(),
                     aCompany().withId(2L)
@@ -124,7 +124,7 @@ public class CompanyServiceTests {
         @Test
         @DisplayName("should create and return a new company")
         void happyPath() {
-            when(currentUserService.getCurrentUser())
+            when(profileService.getCurrentUser())
                     .thenReturn(aUser());
             var request = new CompanyCreateRequest(
                     "Charlene's Chalet",
@@ -160,7 +160,7 @@ public class CompanyServiceTests {
     class UpdateCompany {
         @BeforeEach
         void initialize() {
-            when(currentUserService.getCurrentUserId()).thenReturn(1L);
+            when(profileService.getCurrentUserId()).thenReturn(1L);
         }
 
         @Nested
@@ -311,7 +311,7 @@ public class CompanyServiceTests {
     class RemoveCompany {
         @BeforeEach
         void initialize() {
-            when(currentUserService.getCurrentUserId()).thenReturn(1L);
+            when(profileService.getCurrentUserId()).thenReturn(1L);
         }
 
         @Test

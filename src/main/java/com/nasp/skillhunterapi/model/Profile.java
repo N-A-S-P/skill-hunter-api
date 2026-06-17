@@ -14,8 +14,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "app_user")
-public class AppUser extends BaseEntity {
+public class Profile extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String userName;
-    private String display;
+    private String displayName;
+    private String givenName;
+    private String familyName;
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String externalSubject;
 }

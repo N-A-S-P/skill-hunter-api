@@ -1,11 +1,10 @@
-package com.nasp.skillhunterapi.testutils;
+package com.nasp.skillhunterapi.testutils.builder;
 
 import com.nasp.skillhunterapi.enums.AddressType;
 import com.nasp.skillhunterapi.model.Address;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AddressBuilder {
     private Long id = 1L;

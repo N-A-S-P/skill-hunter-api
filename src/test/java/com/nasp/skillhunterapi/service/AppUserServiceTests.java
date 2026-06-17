@@ -1,9 +1,9 @@
 package com.nasp.skillhunterapi.service;
 
-import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
-import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
-import com.nasp.skillhunterapi.mapping.AppUserMapper;
-import com.nasp.skillhunterapi.model.AppUser;
+import com.nasp.skillhunterapi.dto.Profile.ProfileResponse;
+import com.nasp.skillhunterapi.dto.Profile.AppUserRequest;
+import com.nasp.skillhunterapi.mapping.ProfileMapper;
+import com.nasp.skillhunterapi.model.Profile;
 import com.nasp.skillhunterapi.repository.AppUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class AppUserServiceTests {
 
     @BeforeEach
     void initialize() {
-        var mapper = new AppUserMapper();
+        var mapper = new ProfileMapper();
         repository = mock(AppUserRepository.class);
         sut = new AppUserService(repository, mapper);
     }
@@ -62,22 +62,22 @@ public class AppUserServiceTests {
             assertThat(result).hasSize(2);
 
             assertThat(result)
-                    .extracting(AppUserResponse::id)
+                    .extracting(ProfileResponse::id)
                     .containsExactly(1L, 2L);
 
             assertThat(result)
-                    .extracting(AppUserResponse::userName)
+                    .extracting(ProfileResponse::userName)
                     .containsExactly("testuser", "test_user");
 
             assertThat(result)
-                    .extracting(AppUserResponse::display)
+                    .extracting(ProfileResponse::display)
                     .containsExactly("Amanda", "Bianca");
         }
     }
 
     @Nested
     @DisplayName("getAppUserById")
-    class GetAppUserById {
+    class GetProfileById {
         @Test
         @DisplayName("should return mapped AppUser DTO")
         void happyPath() {
@@ -101,13 +101,13 @@ public class AppUserServiceTests {
 
             assertThatThrownBy(() -> sut.getAppUserById(1L))
                     .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessage(getEntityIdNotFoundMessage(AppUser.class, 1L));
+                    .hasMessage(getEntityIdNotFoundMessage(Profile.class, 1L));
         }
     }
 
     @Nested
     @DisplayName("getAppUserByUserName")
-    class GetAppUserByUserName {
+    class GetProfileName {
         @Test
         @DisplayName("should returned mapped AppUser DTO")
         void happyPath() {
@@ -137,20 +137,20 @@ public class AppUserServiceTests {
 
     @Nested
     @DisplayName("createAppUser")
-    class CreateAppUser {
+    class CreateProfile {
         @Test
         @DisplayName("should create a new user and return the mapped DTO")
         void happyPath() {
             when(repository.existsByUserNameIgnoreCase(anyString()))
                     .thenReturn(false);
-            when(repository.save(any(AppUser.class)))
+            when(repository.save(any(Profile.class)))
                     .thenReturn(createAppUser(1L, "testuser", "Test User"));
 
             var result = sut.createAppUser(
                     new AppUserRequest("testuser", "Test User")
             );
 
-            verify(repository).save(any(AppUser.class));
+            verify(repository).save(any(Profile.class));
 
             assertThat(result).isNotNull();
             assertThat(result.id()).isEqualTo(1L);
@@ -167,13 +167,13 @@ public class AppUserServiceTests {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage(duplicatedUsernameMessage.formatted("testuser"));
 
-            verify(repository, never()).save(any(AppUser.class));
+            verify(repository, never()).save(any(Profile.class));
         }
     }
 
     @Nested
     @DisplayName("updateAppUser")
-    class UpdateAppUser {
+    class UpdateProfile {
         @Test
         @DisplayName("should update an existing user and return the mapped DTO")
         void happyPath() {
@@ -182,13 +182,13 @@ public class AppUserServiceTests {
                     .thenReturn(Optional.of(existingUser));
             when(repository.findByUserNameIgnoreCase(anyString()))
                     .thenReturn(Optional.empty());
-            when(repository.save(any(AppUser.class)))
+            when(repository.save(any(Profile.class)))
                     .thenAnswer(invocation ->
                             invocation.getArgument(0));
 
             var result = sut.updateAppUser(1L, new AppUserRequest("test_user", "Test User, Jr."));
 
-            verify(repository).save(any(AppUser.class));
+            verify(repository).save(any(Profile.class));
 
             assertThat(result).isNotNull();
             assertThat(result.id()).isEqualTo(1L);
@@ -206,9 +206,9 @@ public class AppUserServiceTests {
 
             assertThatThrownBy(() -> sut.updateAppUser(1L, new AppUserRequest("testuser", "Test User")))
                     .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessage(getEntityIdNotFoundMessage(AppUser.class, 1L));
+                    .hasMessage(getEntityIdNotFoundMessage(Profile.class, 1L));
 
-            verify(repository, never()).save(any(AppUser.class));
+            verify(repository, never()).save(any(Profile.class));
         }
 
         @Test
@@ -228,7 +228,7 @@ public class AppUserServiceTests {
             assertThat(result.display()).isEqualTo("Adele");
 
             verify(repository).findById(anyLong());
-            verify(repository).save(any(AppUser.class));
+            verify(repository).save(any(Profile.class));
         }
 
         @Test
@@ -244,13 +244,13 @@ public class AppUserServiceTests {
                     .hasMessage(duplicatedUsernameMessage.formatted(request.userName()));
 
             verify(repository, never()).findById(anyLong());
-            verify(repository, never()).save(any(AppUser.class));
+            verify(repository, never()).save(any(Profile.class));
         }
     }
 
     @Nested
     @DisplayName("deleteAppUser")
-    class DeleteAppUser {
+    class DeleteProfile {
         @Test
         @DisplayName("should delete existing user")
         void happyPath() {
@@ -268,7 +268,7 @@ public class AppUserServiceTests {
 
             assertThatThrownBy(() -> sut.deleteAppUser(1L))
                     .isInstanceOf(EntityNotFoundException.class)
-                    .hasMessage(getEntityIdNotFoundMessage(AppUser.class, 1L));
+                    .hasMessage(getEntityIdNotFoundMessage(Profile.class, 1L));
 
             verify(repository, never()).deleteById(anyLong());
         }

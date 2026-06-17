@@ -11,7 +11,41 @@ services:
     volumes:
       - skillhunter_pg_data:/var/lib/postgresql/data
 
-# add auth stuff when workflow built, not before
+  postgres-keycloak:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: keycloak_user
+      POSTGRES_PASSWORD: keycloak_pass
+      POSTGRES_DB: keycloak
+    volumes:
+      - keycloak_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # exposed for local debugging
+    labels:
+      org.springframework.boot.ignore: true
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.1
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: keycloak_pass
+      KC_DB_URL_HOST: postgres-keycloak
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    depends_on:
+      - postgres-keycloak
+    ports:
+      - "8081:8080"
 
 volumes:
   skillhunter_pg_data:
+  keycloak_data:

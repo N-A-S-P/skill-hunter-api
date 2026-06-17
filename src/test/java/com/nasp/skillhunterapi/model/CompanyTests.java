@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static com.nasp.skillhunterapi.testutils.AddressBuilder.anAddress;
-import static com.nasp.skillhunterapi.testutils.CompanyBuilder.aCompany;
+import static com.nasp.skillhunterapi.testutils.builder.AddressBuilder.anAddress;
+import static com.nasp.skillhunterapi.testutils.builder.CompanyBuilder.aCompany;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

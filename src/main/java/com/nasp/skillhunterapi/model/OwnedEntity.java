@@ -12,5 +12,5 @@ public abstract class OwnedEntity extends BaseEntity {
     @Setter
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    protected AppUser owner;
+    protected Profile owner;
 }

@@ -1,8 +1,8 @@
-package com.nasp.skillhunterapi.testutils;
+package com.nasp.skillhunterapi.testutils.builder;
 
 import com.nasp.skillhunterapi.enums.CompanyType;
 import com.nasp.skillhunterapi.model.Address;
-import com.nasp.skillhunterapi.model.AppUser;
+import com.nasp.skillhunterapi.model.Profile;
 import com.nasp.skillhunterapi.model.Company;
 
 import java.util.ArrayList;
@@ -11,16 +11,17 @@ import java.util.List;
 import java.util.Set;
 
 import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
+import static com.nasp.skillhunterapi.testutils.builder.ProfileBuilder.aProfile;
 
 public final class CompanyBuilder {
     private Long id = 1L;
     private String name = "Bumblebee Debuggers";
     private String website = "http://www.de-bumbler.org";
     private String industry = "Technology";
-    private Set<CompanyType> companyTypes = new HashSet<>();
+    private Set<CompanyType> companyTypes = new HashSet<>(Set.of(CompanyType.STAFFING_FIRM));
     private List<Address> addresses = new ArrayList<>();
 
-    private AppUser owner = createAppUser(1L, "i_own_u", "Hades");
+    private Profile owner = aProfile().build();
 
     private CompanyBuilder() {
     }
@@ -69,7 +70,7 @@ public final class CompanyBuilder {
         return this;
     }
 
-    public CompanyBuilder withOwner(AppUser owner) {
+    public CompanyBuilder withOwner(Profile owner) {
         this.owner = owner;
         return this;
     }

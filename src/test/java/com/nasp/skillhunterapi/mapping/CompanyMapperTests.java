@@ -4,15 +4,15 @@ import com.nasp.skillhunterapi.dto.Company.AddressCreateRequest;
 import com.nasp.skillhunterapi.dto.Company.CompanyCreateRequest;
 import com.nasp.skillhunterapi.dto.Company.CompanyUpdateRequest;
 import com.nasp.skillhunterapi.enums.CompanyType;
-import com.nasp.skillhunterapi.model.Address;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.nasp.skillhunterapi.testutils.AddressBuilder.anAddress;
-import static com.nasp.skillhunterapi.testutils.CompanyBuilder.aCompany;
+import static com.nasp.skillhunterapi.testutils.LookupResponseAssertions.matchesLookup;
+import static com.nasp.skillhunterapi.testutils.builder.AddressBuilder.anAddress;
+import static com.nasp.skillhunterapi.testutils.builder.CompanyBuilder.aCompany;
 import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,9 +25,7 @@ public class CompanyMapperTests {
     @DisplayName("should map Company to CompanyListItemResponse")
     void toListItemResponse() {
         var sut = new CompanyMapper(addressMapper, lookupMapper);
-        var company = aCompany()
-                .withCompanyTypes(CompanyType.STAFFING_FIRM)
-                .build();
+        var company = aCompany().build();
 
         var result = sut.toListItemResponse(company);
 
@@ -36,10 +34,7 @@ public class CompanyMapperTests {
         assertThat(result.website()).isEqualTo(company.getWebsite());
         assertThat(result.industry()).isEqualTo(company.getIndustry());
         assertThat(result.companyTypes()).singleElement()
-                .satisfies(type -> {
-                    assertEquals("STAFFING_FIRM", type.value());
-                    assertEquals("Staffing Firm", type.display());
-                });
+                .satisfies(matchesLookup(CompanyType.STAFFING_FIRM));
     }
 
     @Test
@@ -47,7 +42,6 @@ public class CompanyMapperTests {
     void toDetailResponse() {
         var sut = new CompanyMapper(addressMapper, lookupMapper);
         var company = aCompany()
-                .withCompanyTypes(CompanyType.STAFFING_FIRM)
                 .withAddresses(anAddress().build())
                 .build();
 
@@ -56,10 +50,8 @@ public class CompanyMapperTests {
         assertThat(result.id()).isEqualTo(company.getId());
         assertThat(result.name()).isEqualTo(company.getName());
         assertThat(result.website()).isEqualTo(company.getWebsite());
-        assertThat(result.companyTypes()).singleElement().satisfies(type -> {
-            assertThat(type.value()).isEqualTo("STAFFING_FIRM");
-            assertThat(type.display()).isEqualTo("Staffing Firm");
-        });
+        assertThat(result.companyTypes()).singleElement()
+                .satisfies(matchesLookup(CompanyType.STAFFING_FIRM));
         assertThat(result.addresses()).singleElement().satisfies(address -> {
 
         });
@@ -88,8 +80,7 @@ public class CompanyMapperTests {
     @DisplayName("should update Company from CompanyUpdateRequest")
     void updateEntity() {
         var sut = new CompanyMapper(addressMapper, lookupMapper);
-        var company = aCompany()
-                .withCompanyTypes(CompanyType.STAFFING_FIRM).build();
+        var company = aCompany().build();
         var request = new CompanyUpdateRequest("Witwicky Solutions", "https://www.witwicky.com", "Healthcare", Set.of(CompanyType.HIRER));
 
         sut.updateEntity(company, request);

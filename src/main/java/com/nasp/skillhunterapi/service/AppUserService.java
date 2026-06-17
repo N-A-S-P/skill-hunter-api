@@ -1,9 +1,9 @@
 package com.nasp.skillhunterapi.service;
 
-import com.nasp.skillhunterapi.dto.AppUser.AppUserResponse;
-import com.nasp.skillhunterapi.dto.AppUser.AppUserRequest;
+import com.nasp.skillhunterapi.dto.Profile.ProfileResponse;
+import com.nasp.skillhunterapi.dto.Profile.AppUserRequest;
 import com.nasp.skillhunterapi.mapping.BaseEntityMapper;
-import com.nasp.skillhunterapi.model.AppUser;
+import com.nasp.skillhunterapi.model.Profile;
 import com.nasp.skillhunterapi.repository.AppUserRepository;
 import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdNotFoundMessage;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,41 +17,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppUserService {
     private final AppUserRepository repository;
-    private final BaseEntityMapper<AppUser, AppUserResponse, AppUserRequest, AppUserRequest> baseEntityMapper;
+    private final BaseEntityMapper<Profile, ProfileResponse, AppUserRequest, AppUserRequest> userMapper;
 
-    public List<AppUserResponse> getAllAppUsers() {
+    public List<ProfileResponse> getAllAppUsers() {
         return repository.findAll()
                 .stream()
-                .map(baseEntityMapper::toResponse)
+                .map(userMapper::toResponse)
                 .toList();
     }
 
-    public AppUserResponse getAppUserById(Long id) {
+    public ProfileResponse getAppUserById(Long id) {
         var user = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        getEntityIdNotFoundMessage(AppUser.class, id)
+                        getEntityIdNotFoundMessage(Profile.class, id)
                 ));
-        return baseEntityMapper.toResponse(user);
+        return userMapper.toResponse(user);
     }
 
-    public AppUserResponse getAppUserByUserName(String userName) {
+    public ProfileResponse getAppUserByUserName(String userName) {
         var user = repository.findByUserNameIgnoreCase(userName)
                 .orElseThrow(() ->
                         new EntityNotFoundException(
                                 "Could not find AppUser with username \"%s\"".formatted(userName)));
-        return baseEntityMapper.toResponse(user);
+        return userMapper.toResponse(user);
     }
 
-    public AppUserResponse createAppUser(AppUserRequest request) {
+    public ProfileResponse createAppUser(AppUserRequest request) {
         if (repository.existsByUserNameIgnoreCase(request.userName())) {
             throw new IllegalArgumentException(getDuplicateUserNameMessage(request.userName()));
         }
 
-        var user = repository.save(baseEntityMapper.toEntity(request));
-        return baseEntityMapper.toResponse(user);
+        var user = repository.save(userMapper.toEntity(request));
+        return userMapper.toResponse(user);
     }
 
-    public AppUserResponse updateAppUser(Long id, AppUserRequest request) {
+    public ProfileResponse updateAppUser(Long id, AppUserRequest request) {
         var existingUser = repository.findByUserNameIgnoreCase(request.userName());
         if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
             throw new IllegalArgumentException(getDuplicateUserNameMessage(request.userName()));
@@ -59,15 +59,15 @@ public class AppUserService {
 
         var user = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        getEntityIdNotFoundMessage(AppUser.class, id)));
-        baseEntityMapper.updateEntity(user, request);
+                        getEntityIdNotFoundMessage(Profile.class, id)));
+        userMapper.updateEntity(user, request);
         repository.save(user);
-        return baseEntityMapper.toResponse(user);
+        return userMapper.toResponse(user);
     }
 
     public void deleteAppUser(Long id) {
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException(getEntityIdNotFoundMessage(AppUser.class, id));
+            throw new EntityNotFoundException(getEntityIdNotFoundMessage(Profile.class, id));
         }
 
         repository.deleteById(id);

@@ -4,7 +4,7 @@ import com.nasp.skillhunterapi.dto.Company.CompanyCreateRequest;
 import com.nasp.skillhunterapi.dto.Company.CompanyDetailResponse;
 import com.nasp.skillhunterapi.dto.Company.CompanyListItemResponse;
 import com.nasp.skillhunterapi.dto.Company.CompanyUpdateRequest;
-import com.nasp.skillhunterapi.model.AppUser;
+import com.nasp.skillhunterapi.model.Profile;
 import com.nasp.skillhunterapi.model.Company;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +46,7 @@ public class CompanyMapper implements
     }
 
     @Override
-    public Company toEntity(CompanyCreateRequest request, AppUser owner) {
+    public Company toEntity(CompanyCreateRequest request, Profile owner) {
         var company = new Company(
                 request.name(),
                 request.website(),
