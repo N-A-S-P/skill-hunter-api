@@ -1,7 +1,7 @@
 # Skill Hunter API
 
 ![Build](https://github.com/N-A-S-P/skill-hunter-api/actions/workflows/maven-tests.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-93%25-green)
+![Coverage](https://img.shields.io/badge/coverage-92%25-34D058)
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0-green)
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue)
@@ -15,6 +15,7 @@ The long-term goal is to provide a centralized place to track:
 * Positions
 * Applications
 * Application history
+* Work history
 * Professional accomplishments
 * Notes and interactions
 
@@ -37,7 +38,9 @@ The project began as an Access database, briefly evolved into a Django applicati
 
 Implemented:
 
-* AppUser CRUD API
+* Authentication
+* Profile GET
+* Company and Address CRUD
 * Validation
 * Global exception handling
 * OpenAPI documentation
@@ -45,8 +48,7 @@ Implemented:
 
 In Progress:
 
-* Company management
-* Expanded test coverage
+* Contact management
 
 ## Running the Application
 

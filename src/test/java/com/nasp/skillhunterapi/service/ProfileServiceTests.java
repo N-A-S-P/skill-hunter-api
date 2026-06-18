@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -55,8 +56,20 @@ public class ProfileServiceTests {
         }
 
         @Test
-        @DisplayName("should throw AccessDeniedException when no authorization")
-        void unauthenticated() {
+        @DisplayName("should throw AccessDeniedException when no auth")
+        void noAuth() {
+            assertThatThrownBy(() -> sut.getCurrentUserId())
+                    .isInstanceOf(AccessDeniedException.class)
+                    .hasMessage("No authenticated user");
+        }
+
+        @Test
+        @DisplayName("should throw AccessDeniedException when principal is not jwt")
+        void principalNotJwt() {
+            var context = SecurityContextHolder.createEmptyContext();
+            var auth = new TestingAuthenticationToken("not-a-jwt", null);
+            context.setAuthentication(auth);
+            SecurityContextHolder.setContext(context);
             assertThatThrownBy(() -> sut.getCurrentUserId())
                     .isInstanceOf(AccessDeniedException.class)
                     .hasMessage("No authenticated user");
@@ -91,7 +104,7 @@ public class ProfileServiceTests {
         }
 
         @Test
-        @DisplayName("should throw AccessDeniedException when no authorization")
+        @DisplayName("should throw AccessDeniedException when no auth")
         void unauthenticated() {
             assertThatThrownBy(() -> sut.getCurrentUser())
                     .isInstanceOf(AccessDeniedException.class);
@@ -112,6 +125,8 @@ public class ProfileServiceTests {
     @Nested
     @DisplayName("getProfile")
     class GetProfile {
+        @Test
+        @DisplayName("should return mapped Profile associated with external subject")
         void happyPath() {
             initializeJwt();
             var profile = aProfile().build();
@@ -128,7 +143,7 @@ public class ProfileServiceTests {
         }
 
         @Test
-        @DisplayName("should throw AccessDeniedException when no authorization")
+        @DisplayName("should throw AccessDeniedException when no auth")
         void unauthenticated() {
             assertThatThrownBy(() -> sut.getProfile())
                     .isInstanceOf(AccessDeniedException.class);
