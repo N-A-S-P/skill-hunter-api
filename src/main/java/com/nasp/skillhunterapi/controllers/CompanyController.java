@@ -4,6 +4,7 @@ import com.nasp.skillhunterapi.dto.Company.*;
 import com.nasp.skillhunterapi.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,13 @@ class CompanyController {
     @Operation(summary = "Create new Company")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompanyDetailResponse createCompany(@RequestBody CompanyCreateRequest request) {
+    public CompanyDetailResponse createCompany(@Valid @RequestBody CompanyCreateRequest request) {
         return companyService.createCompany(request);
     }
 
     @Operation(summary = "Update Company")
     @PutMapping("/{id}")
-    public CompanyDetailResponse updateCompany(@PathVariable Long id, @RequestBody CompanyUpdateRequest request) {
+    public CompanyDetailResponse updateCompany(@PathVariable Long id, @Valid @RequestBody CompanyUpdateRequest request) {
         return companyService.updateCompany(id, request);
     }
 
@@ -53,6 +54,7 @@ class CompanyController {
 
     @Operation(summary = "Remove Company", description = "This will cascade to addresses, contact relationships, positions, and applications")
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCompany(@PathVariable Long id) {
         companyService.removeCompany(id);
     }
