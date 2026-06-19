@@ -28,6 +28,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Test with Maven
-      run: mvn -B test --file pom.xml
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn -B clean verify sonar:sonar --file pom.xml
 
 
