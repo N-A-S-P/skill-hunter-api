@@ -3,7 +3,7 @@
 ![Skill Hunter Logo](src/main/resources/static/leopard-colored.svg) 
 
 ![Build](https://github.com/N-A-S-P/skill-hunter-api/actions/workflows/maven-tests.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-92%25-34D058)
+![Coverage](https://img.shields.io/badge/coverage-96%25-34D058)
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-green)
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue)
@@ -68,11 +68,11 @@ http://localhost:8080/swagger-ui.html
 Apache 2.0
 
 ## Version History
-| Version # | Status      | Description                                   |
-|-----------|-------------|-----------------------------------------------|
-| 0.1.0     | Done        | Initial project setup with Profile management |
-| 0.2.0     | Done        | Company and Address management                |
-| 0.3.0     | In Progress | Keycloak authentication and Profile endpoint  |
+| Version # | Status | Description                                   |
+|-----------|--------|-----------------------------------------------|
+| 0.1.0     | Done   | Initial project setup with Profile management |
+| 0.2.0     | Done   | Company and Address management                |
+| 0.3.0     | Done   | Keycloak authentication and Profile endpoint  |
 
 ## Roadmap
 
