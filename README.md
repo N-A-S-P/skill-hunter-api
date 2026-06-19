@@ -68,18 +68,34 @@ http://localhost:8080/swagger-ui.html
 Apache 2.0
 
 ## Version History
-| Version # | Status | Description                                   |
-|-----------|--------|-----------------------------------------------|
-| 0.1.0     | Done   | Initial project setup with Profile management |
-| 0.2.0     | Done   | Company and Address management                |
-| 0.3.0     | Done   | Keycloak authentication and Profile endpoint  |
+| Version # | Status      | Description                                   |
+|-----------|-------------|-----------------------------------------------|
+| 0.1.0     | Done        | Initial project setup with Profile management |
+| 0.2.0     | Done        | Company and Address management                |
+| 0.3.0     | Done        | Keycloak authentication and Profile endpoint  |
+| 0.4.0     | In Progress | Contact management                            |
 
 ## Roadmap
 
-* Contact management
-* Company-Contact relationship management
-* Position management
-* Application tracking
-* Application status history
-* Interaction tracking
-* Resume generation (future goal)
+### V1.0.0 - Complete Job Search Domain
+
+* [x] Authentication
+* [x] Company and Company Address management
+* [ ] Contact management
+* [ ] Company-Contact relationship management
+* [ ] Position management
+* [ ] Application tracking
+* [ ] Application status history
+* [ ] Interaction tracking
+
+### V2.0.0 - Complete Career History Domain
+
+* [ ] Placement management
+* [ ] Project management
+* [ ] Accomplishment management
+* [ ] C/P/STAR management
+
+### Future Goals
+
+* [ ] Profile customization
+* [ ] Resume generation
