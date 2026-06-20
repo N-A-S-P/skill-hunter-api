@@ -19,4 +19,8 @@ public record AddressResponse(
         String postalCode,
         List<LookupResponse> addressTypes
 ) {
+    public AddressResponse {
+        addressTypes = addressTypes == null ?
+                List.of() : addressTypes;
+    }
 }

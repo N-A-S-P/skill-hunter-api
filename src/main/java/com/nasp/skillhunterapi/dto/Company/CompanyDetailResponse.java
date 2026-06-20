@@ -17,4 +17,11 @@ public record CompanyDetailResponse(
         List<LookupResponse> companyTypes,
         List<AddressResponse> addresses
 ) {
+    public CompanyDetailResponse {
+        companyTypes = companyTypes == null ?
+                List.of() : companyTypes;
+
+        addresses = addresses == null ?
+                List.of() : addresses;
+    }
 }
