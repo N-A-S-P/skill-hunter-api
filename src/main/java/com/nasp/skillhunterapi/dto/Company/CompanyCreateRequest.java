@@ -2,7 +2,6 @@ package com.nasp.skillhunterapi.dto.Company;
 
 import com.nasp.skillhunterapi.enums.CompanyType;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Set;

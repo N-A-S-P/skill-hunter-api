@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
 import static com.nasp.skillhunterapi.testutils.builder.ProfileBuilder.aProfile;
 
 public final class CompanyBuilder {

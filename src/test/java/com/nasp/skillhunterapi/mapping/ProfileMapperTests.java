@@ -5,7 +5,6 @@ import com.nasp.skillhunterapi.dto.Profile.AppUserRequest;
 import com.nasp.skillhunterapi.model.Profile;
 import org.junit.jupiter.api.Test;
 
-import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
 import static com.nasp.skillhunterapi.testutils.builder.ProfileBuilder.aProfile;
 import static org.assertj.core.api.Assertions.assertThat;
 

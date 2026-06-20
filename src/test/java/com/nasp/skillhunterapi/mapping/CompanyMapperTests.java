@@ -15,7 +15,6 @@ import static com.nasp.skillhunterapi.testutils.builder.AddressBuilder.anAddress
 import static com.nasp.skillhunterapi.testutils.builder.CompanyBuilder.aCompany;
 import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompanyMapperTests {
     private final LookupMapper lookupMapper = new LookupMapper();
