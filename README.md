@@ -97,5 +97,11 @@ Apache 2.0
 
 ### Future Goals
 
-* [ ] Profile customization
+#### Resume Management (v3?)
+* [ ] Resume management
+* [ ] Resume imports (.pdf, .docx, .txt)
+* [ ] Resume Template management
 * [ ] Resume generation
+
+#### User Experience
+* [ ] Profile customization
