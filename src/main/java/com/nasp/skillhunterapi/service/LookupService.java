@@ -17,6 +17,8 @@ public class LookupService {
                     "addressType", AddressType.class,
                     "applicationStatus", PositionApplicationStatus.class,
                     "companyType", CompanyType.class,
+                    "contactMethodContext", ContactMethodContext.class,
+                    "contactMethodType", ContactMethodType.class,
                     "interactionType", InteractionType.class,
                     "positionType", PositionType.class,
                     "relationshipType", RelationshipType.class,
