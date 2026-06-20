@@ -26,7 +26,8 @@ import java.util.Set;
 
 import static com.nasp.skillhunterapi.testutils.JsonSerializer.stringify;
 import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdForOwnerNotFoundMessage;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -79,7 +80,7 @@ public class CompanyControllerTests {
     @DisplayName("GET /api/companies")
     class GetCompanies {
         @Test
-        @DisplayName("return companies for the current user")
+        @DisplayName("should return companies for the current user")
         void happyPath() throws Exception {
             var company = new CompanyListItemResponse(
                     1L,
@@ -108,7 +109,7 @@ public class CompanyControllerTests {
         }
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(get("/api/companies"))
                     .andExpect(status().isUnauthorized());
@@ -166,7 +167,7 @@ public class CompanyControllerTests {
         }
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(get("/api/companies/1"))
                     .andExpect(status().isUnauthorized());
@@ -228,9 +229,9 @@ public class CompanyControllerTests {
             var request = new CompanyCreateRequest("", "", "", Set.of(), List.of());
 
             mockMvc.perform(post("/api/companies")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(stringify(request))
-                    .with(jwt()))
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(stringify(request))
+                            .with(jwt()))
                     .andExpectAll(
                             status().isBadRequest(),
                             jsonPath("$.status").value(400),
@@ -241,7 +242,7 @@ public class CompanyControllerTests {
         }
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(post("/api/companies"))
                     .andExpect(status().isUnauthorized());
@@ -251,14 +252,69 @@ public class CompanyControllerTests {
     @Nested
     @DisplayName("PUT /api/companies/{id}")
     class UpdateCompany {
-        void happyPath() throws Exception {}
+        @Test
+        @DisplayName("should return 200 and updated company")
+        void happyPath() throws Exception {
+            when(companyService.updateCompany(eq(1L), any(CompanyUpdateRequest.class)))
+                    .thenReturn(detailResponse);
 
-        void illegalArgument() throws Exception {}
+            var request = new CompanyUpdateRequest(detailResponse.name(), detailResponse.website(), detailResponse.industry(), Set.of(CompanyType.STAFFING_FIRM));
 
-        void notFound() throws Exception {}
+            mockMvc.perform(put("/api/companies/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpectAll(
+                            status().isOk(),
+                            jsonPath("$.name").value(detailResponse.name()),
+                            jsonPath("$.website").value(detailResponse.website()),
+                            jsonPath("$.industry").value(detailResponse.industry()),
+                            jsonPath("$.companyTypes[0].value").value(detailResponse.companyTypes().getFirst().value()),
+                            jsonPath("$.companyTypes[0].display").value(detailResponse.companyTypes().getFirst().display())
+                    );
+        }
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 400 if no company name supplied")
+        void illegalArgument() throws Exception {
+            var request = new CompanyUpdateRequest("", "", "", Set.of());
+
+            mockMvc.perform(put("/api/companies/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpectAll(
+                            status().isBadRequest(),
+                            jsonPath("$.status").value(400),
+                            jsonPath("$.error").value("Bad Request"),
+                            jsonPath("$.message").value("name: must not be blank"),
+                            jsonPath("$.path").value("/api/companies/1")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return 404 when company not found for user")
+        void notFound() throws Exception {
+            when(companyService.updateCompany(eq(1L), any(CompanyUpdateRequest.class)))
+                    .thenThrow(new EntityNotFoundException(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)));
+
+            var request = new CompanyUpdateRequest(detailResponse.name(), "", "", Set.of());
+
+            mockMvc.perform(put("/api/companies/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpectAll(
+                            status().isNotFound(),
+                            jsonPath("$.status").value(404),
+                            jsonPath("$.error").value("Not Found"),
+                            jsonPath("$.message").value(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)),
+                            jsonPath("$.path").value("/api/companies/1")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(put("/api/companies/1"))
                     .andExpect(status().isUnauthorized());
@@ -268,14 +324,98 @@ public class CompanyControllerTests {
     @Nested
     @DisplayName("PUT /api/companies/{id}/addresses")
     class UpdateCompanyAddresses {
-        void happyPath() throws Exception {}
 
-        void illegalArgument() throws Exception {}
-
-        void notFound() throws Exception {}
+        private final AddressResponse address = detailResponse.addresses().getFirst();
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 200 when update is successful")
+        void happyPath() throws Exception {
+            when(companyService.updateCompany(eq(1L), any(CompanyAddressRequest.class)))
+                    .thenReturn(detailResponse);
+
+            var request = new CompanyAddressRequest(List.of(),
+                    List.of(new AddressUpdateRequest(
+                            1L,
+                            address.line1(),
+                            address.line2(),
+                            address.city(),
+                            address.state(),
+                            address.postalCode(),
+                            Set.of(AddressType.MAILING)
+                    )),
+                    List.of(2L, 3L));
+
+            mockMvc.perform(put("/api/companies/1/addresses")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("should return 400 when trying to update and delete same address")
+        void illegalArgument() throws Exception {
+            when(companyService.updateCompany(eq(1L), any(CompanyAddressRequest.class)))
+                    .thenThrow(new IllegalArgumentException("Address cannot be removed and updated in the same request"));
+
+            var request = new CompanyAddressRequest(List.of(), List.of(
+                    new AddressUpdateRequest(
+                            1L,
+                            address.line1(),
+                            address.line2(),
+                            address.city(),
+                            address.state(),
+                            address.postalCode(),
+                            Set.of(AddressType.BILLING)
+                    )
+            ), List.of(1L));
+
+            mockMvc.perform(put("/api/companies/1/addresses")
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpectAll(
+                            status().isBadRequest(),
+                            jsonPath("$.status").value(400),
+                            jsonPath("$.error").value("Bad Request"),
+                            jsonPath("$.message").value("Address cannot be removed and updated in the same request"),
+                            jsonPath("$.path").value("/api/companies/1/addresses")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return 404 when company not found")
+        void notFound() throws Exception {
+            when(companyService.updateCompany(eq(1L), any(CompanyAddressRequest.class)))
+                    .thenThrow(new EntityNotFoundException(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)));
+
+            var request = new CompanyAddressRequest(List.of(),
+                    List.of(new AddressUpdateRequest(
+                            1L,
+                            address.line1(),
+                            address.line2(),
+                            address.city(),
+                            address.state(),
+                            address.postalCode(),
+                            Set.of(AddressType.MAILING)
+                    )),
+                    List.of(2L, 3L));
+
+            mockMvc.perform(put("/api/companies/1/addresses")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(stringify(request))
+                            .with(jwt()))
+                    .andExpectAll(
+                            status().isNotFound(),
+                            jsonPath("$.status").value(404),
+                            jsonPath("$.error").value("Not Found"),
+                            jsonPath("$.message").value(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)),
+                            jsonPath("$.path").value("/api/companies/1/addresses")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(put("/api/companies/1/addresses"))
                     .andExpect(status().isUnauthorized());
@@ -285,12 +425,32 @@ public class CompanyControllerTests {
     @Nested
     @DisplayName("DELETE /api/companies/{id}")
     class DeleteCompany {
-        void happyPath() throws Exception {}
-
-        void notFound() throws Exception {}
+        @Test
+        @DisplayName("should return 204 when successful")
+        void happyPath() throws Exception {
+            mockMvc.perform(delete("/api/companies/1")
+                            .with(jwt()))
+                    .andExpect(status().isNoContent());
+        }
 
         @Test
-        @DisplayName("return 401 when no current user")
+        @DisplayName("should return 404 when no company found")
+        void notFound() throws Exception {
+            doThrow(new EntityNotFoundException(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)))
+                    .when(companyService).removeCompany(1L);
+
+            mockMvc.perform(delete("/api/companies/1").with(jwt()))
+                    .andExpectAll(
+                            status().isNotFound(),
+                            jsonPath("$.status").value(404),
+                            jsonPath("$.error").value("Not Found"),
+                            jsonPath("$.message").value(getEntityIdForOwnerNotFoundMessage(Company.class, 1L, 1L)),
+                            jsonPath("$.path").value("/api/companies/1")
+                    );
+        }
+
+        @Test
+        @DisplayName("should return 401 when no current user")
         void unauthorized() throws Exception {
             mockMvc.perform(delete("/api/companies/1"))
                     .andExpect(status().isUnauthorized());

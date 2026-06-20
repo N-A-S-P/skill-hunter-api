@@ -3,7 +3,7 @@
 ![Skill Hunter Logo](src/main/resources/static/leopard-colored.svg) 
 
 ![Build](https://github.com/N-A-S-P/skill-hunter-api/actions/workflows/maven-tests.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-96%25-34D058)
+![Coverage](https://img.shields.io/badge/coverage-97%25-34D058)
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-green)
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue)
