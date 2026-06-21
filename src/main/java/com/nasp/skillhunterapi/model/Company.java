@@ -69,13 +69,11 @@ public class Company extends OwnedEntity {
     }
 
     public void removeAddressById(Long addressId) {
-        var optionalAddress = getAddressById(addressId);
-
-        if (optionalAddress.isPresent()) {
-            var address = optionalAddress.get();
-            addresses.remove(address);
-            address.setCompany(null);
-        }
+        getAddressById(addressId)
+            .ifPresent(address -> {
+                addresses.remove(address);
+                address.setCompany(null);
+            });
     }
 
     public void removeRelationships() {

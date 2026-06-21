@@ -21,12 +21,26 @@ public class Contact extends OwnedEntity {
     public Contact(
             String firstName,
             String lastName,
-            String title
-    ) {
+            String title) {
         initializeCollections();
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
+    }
+
+    public Contact(
+            String firstName,
+            String lastName,
+            String title,
+            List<ContactMethod> contactMethods) {
+        initializeCollections();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+
+        if (contactMethods != null) {
+            contactMethods.forEach(this::addContactMethod);
+        }
     }
 
     @NotNull
@@ -60,13 +74,11 @@ public class Contact extends OwnedEntity {
     }
 
     public void removeContactMethod(Long id) {
-        var methodResult = getContactMethodById(id);
-
-        if (methodResult.isPresent()) {
-            var method = methodResult.get();
-            contactMethods.remove(method);
-            method.setContact(null);
-        }
+        getContactMethodById(id)
+                .ifPresent(method -> {
+                    contactMethods.remove(method);
+                    method.setContact(null);
+                });
     }
 
     public void removeRelationships() {
