@@ -13,7 +13,7 @@ public record CompanyAddressRequest(
         removeAddressIds = removeAddressIds == null ? List.of() : removeAddressIds;
     }
 
-    public Boolean hasConflictingAddressIds() {
+    public boolean hasConflictingAddressIds() {
         return updateAddresses.stream()
                 .map(AddressUpdateRequest::id)
                 .anyMatch(removeAddressIds::contains);
