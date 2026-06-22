@@ -2,12 +2,21 @@
 
 This document is a list of all future facing ideas that are not robust enough to go on the Roadmap.
 
-## ContactInfo
-* Only one `isPreferred` per `ContactInfoType`.
+## General
+* Add Flyway for migrations??
+
+## ContactMethod
+* Only one `isPreferred` per `ContactMethodType`.
+
+## Placement
+
+* Consider `CompensationHistory` to track initial compensation, raises, promotions, contract rate changes, and effective dates.
 
 ## Position
 
+* Compensation should probably include amount + period rather than assuming annual salary.
 * Should it have `minExpectedDaysInOfficePerPeriod`, `maxExpectedDaysInOfficePerPeriod`, and `HybridPeriod` where `HybridPeriod` is WEEKLY, MONTHLY, QUARTERLY, ANNUALLY?
+* `WorkType` needs to include INTERN, CONTRACT, PART_TIME, and maybe others
 
 ## Application
 
