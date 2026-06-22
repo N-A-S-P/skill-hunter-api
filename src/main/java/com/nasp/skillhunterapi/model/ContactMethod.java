@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "contact_methods")
 public class ContactMethod extends BaseEntity {
-    public ContactMethod(ContactMethodType type, ContactMethodContext context, String value, Boolean isPreferred) {
+    public ContactMethod(ContactMethodType type, ContactMethodContext context, String value, boolean isPreferred) {
         this.type = type;
         this.context = context;
         this.value = value;
@@ -32,5 +32,5 @@ public class ContactMethod extends BaseEntity {
 
     private String value;
 
-    private Boolean isPreferred;
+    private boolean isPreferred;
 }

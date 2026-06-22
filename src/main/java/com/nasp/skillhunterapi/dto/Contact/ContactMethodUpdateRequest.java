@@ -9,6 +9,6 @@ public record ContactMethodUpdateRequest(
         @NotBlank ContactMethodType type,
         @NotBlank ContactMethodContext context,
         @NotBlank String value,
-        Boolean isPreferred
+        boolean isPreferred
 ) {
 }

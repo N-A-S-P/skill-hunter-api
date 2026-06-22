@@ -7,6 +7,6 @@ public record ContactMethodResponse(
         LookupResponse type,
         LookupResponse context,
         String value,
-        Boolean isPreferred
+        boolean isPreferred
 ) {
 }

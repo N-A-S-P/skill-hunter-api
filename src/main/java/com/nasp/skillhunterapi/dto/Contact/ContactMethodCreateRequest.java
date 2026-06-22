@@ -8,6 +8,6 @@ public record ContactMethodCreateRequest(
         @NotBlank ContactMethodType type,
         @NotBlank ContactMethodContext context,
         @NotBlank String value,
-        Boolean isPreferred
+        boolean isPreferred
 ) {
 }
