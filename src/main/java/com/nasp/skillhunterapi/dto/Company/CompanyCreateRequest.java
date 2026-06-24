@@ -1,6 +1,7 @@
 package com.nasp.skillhunterapi.dto.Company;
 
 import com.nasp.skillhunterapi.enums.CompanyType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public record CompanyCreateRequest(
         String website,
         String industry,
         Set<CompanyType> companyTypes,
-        List<AddressCreateRequest> addresses
+        List<@Valid AddressCreateRequest> addresses
 ) {
     public CompanyCreateRequest {
         companyTypes = companyTypes == null ?

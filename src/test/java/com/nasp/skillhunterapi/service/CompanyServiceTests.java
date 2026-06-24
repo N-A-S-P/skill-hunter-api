@@ -303,32 +303,6 @@ public class CompanyServiceTests {
                 verify(repository, never()).save(any(Company.class));
 
             }
-
-            @Test
-            @DisplayName("should throw exception when update and delete addresses conflict")
-            void conflictingAddressIds() {
-                var company = aCompany()
-                        .withAddresses(anAddress().build())
-                        .build();
-                when(repository.findByIdAndOwnerId(1L, 1L)).thenReturn(Optional.of(company));
-
-                var request = new CompanyAddressRequest(
-                        null,
-                        List.of(new AddressUpdateRequest(
-                                1L,
-                                "867 La Brea Blvd",
-                                "#5",
-                                "Parasaur Palms",
-                                "MT",
-                                "75309",
-                                Set.of(AddressType.MAILING))),
-                        List.of(1L)
-                );
-
-                assertThatThrownBy(() -> sut.updateCompany(1L, request))
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessage("Address cannot be removed and updated in the same request");
-            }
         }
     }
 

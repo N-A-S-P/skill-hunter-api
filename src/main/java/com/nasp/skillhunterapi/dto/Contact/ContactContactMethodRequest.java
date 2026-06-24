@@ -1,10 +1,13 @@
 package com.nasp.skillhunterapi.dto.Contact;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertFalse;
+
 import java.util.List;
 
 public record ContactContactMethodRequest(
-        List<ContactMethodCreateRequest> createContactMethods,
-        List<ContactMethodUpdateRequest> updateContactMethods,
+        List<@Valid ContactMethodCreateRequest> createContactMethods,
+        List<@Valid ContactMethodUpdateRequest> updateContactMethods,
         List<Long> removeContactMethodIds) {
     public ContactContactMethodRequest {
         createContactMethods = createContactMethods == null ? List.of() : createContactMethods;
@@ -12,12 +15,14 @@ public record ContactContactMethodRequest(
         removeContactMethodIds = removeContactMethodIds == null ? List.of() : removeContactMethodIds;
     }
 
-    public Boolean hasConflictingContactMethodIds() {
+    @AssertFalse(message = "Contact method cannot be removed and updated in the same request")
+    public boolean hasConflictingContactMethodIds() {
         return updateContactMethods.stream()
                 .map(ContactMethodUpdateRequest::id)
                 .anyMatch(removeContactMethodIds::contains);
     }
 
+    @AssertFalse(message = "Request cannot have multiple contact methods of same type marked as preferred")
     public boolean hasDuplicatePreferredContactMethods() {
         var updatePreferred = updateContactMethods.stream().filter(ContactMethodUpdateRequest::isPreferred)
                 .map(ContactMethodUpdateRequest::type).toList();
@@ -31,7 +36,7 @@ public record ContactContactMethodRequest(
                 .anyMatch(type -> updatePreferred.stream().filter(otherType -> otherType.equals(type)).count() > 1);
 
         var createUpdateConflicts = createPreferred.stream().distinct()
-                .anyMatch(type -> updatePreferred.stream().filter(otherType -> otherType.equals(type)).count() > 0);
+                .anyMatch(type -> updatePreferred.stream().anyMatch(otherType -> otherType.equals(type)));
 
         return createConflicts || updateConflicts || createUpdateConflicts;
     }
