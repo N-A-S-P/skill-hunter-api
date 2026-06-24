@@ -22,7 +22,7 @@ public class ProfileService {
 
     public Long getCurrentUserId() {
         var subject = getSubject();
-        return repository.findIdByExternalSubject(subject)
+        return repository.findByExternalSubject(subject).map(Profile::getId)
                 .orElseThrow(() -> new EntityNotFoundException(NO_ASSOCIATED_PROFILE));
     }
 

@@ -48,7 +48,7 @@ public class ProfileServiceTests {
         @DisplayName("should return profile id associated with external subject")
         void happyPath() {
             initializeJwt();
-            when(repository.findIdByExternalSubject(SUBJECT)).thenReturn(Optional.of(1L));
+            when(repository.findByExternalSubject(SUBJECT)).thenReturn(Optional.of(aProfile().build()));
 
             var result = sut.getCurrentUserId();
 
@@ -79,7 +79,7 @@ public class ProfileServiceTests {
         @DisplayName("should throw EntityNotFoundException when no profile id associated with external subject")
         void noProfileForSubject() {
             initializeJwt();
-            when(repository.findIdByExternalSubject(SUBJECT)).thenReturn(Optional.empty());
+            when(repository.findByExternalSubject(SUBJECT)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> sut.getCurrentUserId())
                     .isInstanceOf(EntityNotFoundException.class)
