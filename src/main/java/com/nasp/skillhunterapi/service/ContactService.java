@@ -1,5 +1,6 @@
 package com.nasp.skillhunterapi.service;
 
+import com.nasp.skillhunterapi.provider.CurrentUserProvider;
 import org.springframework.stereotype.Service;
 
 import com.nasp.skillhunterapi.dto.Contact.*;
@@ -22,10 +23,10 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
     private final ContactMethodMapper contactMethodMapper;
-    private final ProfileService profileService;
+    private final CurrentUserProvider currentUserProvider;
 
     private Long getCurrentUserId() {
-        return profileService.getCurrentUserId();
+        return currentUserProvider.getCurrentUserId();
     }
 
     public ContactDetailResponse getContactById(Long id) {
@@ -41,7 +42,7 @@ public class ContactService {
     }
 
     public ContactDetailResponse createContact(ContactCreateRequest request) {
-        var entity = contactMapper.toEntity(request, profileService.getCurrentUser());
+        var entity = contactMapper.toEntity(request, currentUserProvider.getCurrentUser());
         var saved = contactRepository.save(entity);
         return contactMapper.toDetailResponse(saved);
     }

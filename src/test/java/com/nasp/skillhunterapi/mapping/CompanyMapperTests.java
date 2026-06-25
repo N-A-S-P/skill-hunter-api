@@ -13,7 +13,7 @@ import java.util.Set;
 import static com.nasp.skillhunterapi.testutils.LookupResponseAssertions.matchesLookup;
 import static com.nasp.skillhunterapi.testutils.builder.AddressBuilder.anAddress;
 import static com.nasp.skillhunterapi.testutils.builder.CompanyBuilder.aCompany;
-import static com.nasp.skillhunterapi.testutils.TestDataCreator.createAppUser;
+import static com.nasp.skillhunterapi.testutils.builder.ProfileBuilder.aProfile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CompanyMapperTests {
@@ -63,7 +63,7 @@ public class CompanyMapperTests {
         var request = new CompanyCreateRequest("Bumblebee's Debuggers", "www.de-bumbler.org",
                 "Technology", Set.of(CompanyType.RECRUITING_AGENCY), List.of(
                         new AddressCreateRequest("903 Tnomleb Weiv", "", "Ehtnisba", "WY", "35768", Set.of())));
-        var owner = createAppUser(1L, "i_own_u", "Hades");
+        var owner = aProfile().build();
         var result = sut.toEntity(request, owner);
 
         assertThat(result.getName()).isEqualTo(request.name());

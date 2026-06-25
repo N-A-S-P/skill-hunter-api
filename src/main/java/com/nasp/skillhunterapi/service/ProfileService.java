@@ -4,6 +4,7 @@ import com.nasp.skillhunterapi.dto.Profile.AppUserRequest;
 import com.nasp.skillhunterapi.dto.Profile.ProfileResponse;
 import com.nasp.skillhunterapi.mapping.BaseEntityMapper;
 import com.nasp.skillhunterapi.model.Profile;
+import com.nasp.skillhunterapi.provider.CurrentUserProvider;
 import com.nasp.skillhunterapi.repository.AppUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileService {
+public class ProfileService implements CurrentUserProvider {
     private final AppUserRepository repository;
     private final BaseEntityMapper<Profile, ProfileResponse, AppUserRequest, AppUserRequest> mapper;
 

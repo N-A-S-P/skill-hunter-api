@@ -5,6 +5,7 @@ import com.nasp.skillhunterapi.mapping.BaseEntityMapper;
 import com.nasp.skillhunterapi.mapping.OwnedEntityMapper;
 import com.nasp.skillhunterapi.model.Address;
 import com.nasp.skillhunterapi.model.Company;
+import com.nasp.skillhunterapi.provider.CurrentUserProvider;
 import com.nasp.skillhunterapi.repository.CompanyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,12 @@ import static com.nasp.skillhunterapi.util.ExceptionMessages.getEntityIdForOwner
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
-    private final ProfileService profileService;
+    private final CurrentUserProvider currentUserProvider;
     private final OwnedEntityMapper<Company, CompanyDetailResponse, CompanyListItemResponse, CompanyCreateRequest, CompanyUpdateRequest> mapper;
     private final BaseEntityMapper<Address, AddressResponse, AddressCreateRequest, AddressUpdateRequest> addressMapper;
 
     private Long currentUserId() {
-        return profileService.getCurrentUserId();
+        return currentUserProvider.getCurrentUserId();
     }
 
     public CompanyDetailResponse getCompany(Long id) {
@@ -39,7 +40,7 @@ public class CompanyService {
     }
 
     public CompanyDetailResponse createCompany(CompanyCreateRequest request) {
-        var entity = mapper.toEntity(request, profileService.getCurrentUser());
+        var entity = mapper.toEntity(request, currentUserProvider.getCurrentUser());
         companyRepository.save(entity);
         return mapper.toDetailResponse(entity);
     }

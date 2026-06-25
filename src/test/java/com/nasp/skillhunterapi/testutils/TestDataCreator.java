@@ -14,8 +14,4 @@ public final class TestDataCreator {
         user.setId(id);
         return user;
     }
-
-    public static Profile aUser() {
-        return createAppUser(1L, "i_own_u", "Hades");
-    }
 }
