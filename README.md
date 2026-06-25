@@ -8,7 +8,7 @@
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.x-green)
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue)
 
-Skill Hunter is a personal project designed to help organize and manage the job search process. The application started life as an Access database, briefly evolved into a Django application, and is currently being rebuilt as a Java Spring Boot REST API.
+Skill Hunter is a personal project designed to help organize and manage the job search process. The application started life as a Microsoft Access database, was later rebuilt as a Django application, and is currently being rebuilt as a Java Spring Boot REST API.
 
 The long-term goal is to provide a centralized place to track:
 
@@ -20,6 +20,14 @@ The long-term goal is to provide a centralized place to track:
 * Work history
 * Professional accomplishments
 * Notes and interactions
+
+## Development Philosophy
+
+This project follows the ABC+D (Annoyance-Based Coding + Development).
+
+If something is annoying enough, it will eventually be refactored.
+
+Consistency goblins may occasionally influence architectural decisions.
 
 ## Technology Stack
 
@@ -39,7 +47,7 @@ The long-term goal is to provide a centralized place to track:
 ### Implemented:
 
 * Keycloak Authentication with Spring Boot Security
-* Profile GET
+* Current user profile endpoint
 * Company and Address CRUD
 * Validation
 * Global exception handling
@@ -53,15 +61,15 @@ The long-term goal is to provide a centralized place to track:
 
 ## Running the Application
 
+The application requires PostgreSQL and Keycloak. A Docker Compose configuration is provided for local development.
+
 ```bash
 mvn spring-boot:run
 ```
-
 Swagger UI:
 
-```
 http://localhost:8080/swagger-ui.html
-```
+
 
 ## License
 
